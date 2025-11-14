@@ -97,3 +97,19 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+Assets/CriData/
+
+.vsconfig
+
+Assets/CRIMW/
+
+Assets/Materials/
+
+Assets/Plugins/
+
+Assets/TextMesh Pro/
+
+Assets/StreamingAssets/
+
+Assets/Resources/
