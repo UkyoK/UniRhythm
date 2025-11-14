@@ -1,0 +1,72 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using CriWare;
+using UniRhythm_acf.Selector;
+using UnityEngine.UIElements;
+
+public class MySoundManager : MonoBehaviour
+{
+    public static MySoundManager Instance;
+
+    private CriAtomSource atomSrc;
+
+    private bool isMusicPlaying;
+    public void MusicStop()
+    {
+        isMusicPlaying = false;
+    }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        isMusicPlaying = false;
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        atomSrc = gameObject.GetComponent<CriAtomSource>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    public void PlayMusic()
+    {
+        // 再生中なら処理しない
+        if (isMusicPlaying)
+        {
+            return;
+        }
+
+        atomSrc.cueSheet = SettingManager.Instance.FolderName;
+        atomSrc.cueName = SettingManager.Instance.FolderName;
+        atomSrc.Play();
+        isMusicPlaying = true;
+
+        // 曲の再生が開始されたら、キューをSE用のものに切り替え
+        atomSrc.cueSheet = "InGame";
+        atomSrc.cueName = "SE";
+    }
+
+    /// <summary>
+    /// 判定に応じてSEを再生
+    /// </summary>
+    public void PlaySE(Judgement nowJudgement)
+    {
+        atomSrc.player.SetSelectorLabel("Judgement", nowJudgement.ToString());
+        atomSrc.Play();
+    }
+}
