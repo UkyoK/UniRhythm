@@ -24,4 +24,10 @@ public class DebugStart
     {
         EditorSceneManager.OpenScene("Assets/Scenes/TestSelectScene.unity");
     }
+
+    [MenuItem("Debug/Open ResultScene")]
+    private static void OpenResultScene()
+    {
+        EditorSceneManager.OpenScene("Assets/Scenes/OutGame/ResultScene.unity");
+    }
 }

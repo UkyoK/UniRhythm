@@ -659,7 +659,7 @@ MonoBehaviour:
   GreatTime: 75
   MissTime: 100
   IsMirror: 0
-  LocalOffset: 0.2
+  LocalOffset: 0
   Lane1Key: 100
   Lane2Key: 102
   Lane3Key: 106

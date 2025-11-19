@@ -4,22 +4,28 @@ using System.Collections.Generic;
 using TMPro;
 using UniRhythm_acf.Selector;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance;
 
-    private int Combo;
-    private int MaxCombo;
-    private int PerfectCount;
-    private int FastGreatCount;
-    private int LateGreatCount;
-    private int GreatCount;
-    private int FastMissCount;
-    private int LateMissCount;
-    private int MissCount;
+    private const string _InGameScene = "TestScene";
+    private const string _ResultScene = "ResultScene";
 
+    public int Combo { get; private set; }
+    public int MaxCombo { get; private set; }
+    public int PerfectCount { get; private set; }
+    public int FastGreatCount { get; private set; }
+    public int LateGreatCount { get; private set; }
+    public int GreatCount { get; private set; }
+    public int FastMissCount { get; private set; }
+    public int LateMissCount { get; private set; }
+    public int MissCount { get; private set; }
+
+    [SerializeField]
+    private GameObject JudgeCanvas;
     private Transform Parent;
     [SerializeField]
     private GameObject PerfectObject;
@@ -41,6 +47,14 @@ public class ScoreManager : MonoBehaviour
     private GameObject ScoreObject;
     private TextMeshProUGUI ScoreDisp;
 
+    private float PerfectScore;
+    private float GreatScore;
+    private float NowScore;
+    public int DispScore { get; private set; }
+
+    [SerializeField]
+    private float MaxScore;
+
     private void Awake()
     {
         if (Instance == null)
@@ -52,6 +66,16 @@ public class ScoreManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+        DontDestroyOnLoad(gameObject);
+    }
+
+    private void Start()
+    {
+        ResetScore();
+    }
+
+    public void ResetScore()
+    {
         Combo = 0;
         MaxCombo = 0;
         PerfectCount = 0;
@@ -62,13 +86,41 @@ public class ScoreManager : MonoBehaviour
         LateMissCount = 0;
         MissCount = 0;
 
-        Parent = GameObject.Find("JudgeCanvas").transform;
+        PerfectScore = MaxScore / ChartLoader.Instance.AllNotesValue;
+        GreatScore = PerfectScore / 2;
+        NowScore = 0.0f;
+        DispScore = 0;
+
+        if (SceneManager.GetActiveScene().name == _InGameScene)
+        {
+            InGameDisplay();
+        }
+        else if (SceneManager.GetActiveScene().name == _ResultScene)
+        {
+            ResultDisplay();
+        }
+    }
+
+    public void InGameDisplay()
+    {
+        Parent = JudgeCanvas.transform;
         ObjectPos = new Vector3(1280.0f / 2.0f, 720.0f / 2.0f - 30.0f, 0.0f);
 
         ComboDisp = ComboObject.GetComponent<TextMeshProUGUI>();
         ComboDisp.text = "0";
 
         ScoreDisp = ScoreObject.GetComponent<TextMeshProUGUI>();
+        ScoreDisp.text = "0000000";
+    }
+
+    private void UpdateScoreDisplay()
+    {
+        ScoreDisp.text = DispScore.ToString("0000000");
+    }
+
+    public void ResultDisplay()
+    {
+        /* ここにリザルトシーンの初期化を記載 */
     }
 
     public void AddCombo()
@@ -114,8 +166,10 @@ public class ScoreManager : MonoBehaviour
     public void Great(float margin)
     {
         ++GreatCount;
+        NowScore += GreatScore;
+        DispScore = (int)NowScore;
 
-        if(margin < 0)
+        if (margin < 0)
         {
             ++LateGreatCount;
         }
@@ -123,10 +177,15 @@ public class ScoreManager : MonoBehaviour
         {
             ++FastGreatCount;
         }
+
+        UpdateScoreDisplay();
     }
     public void Perfect()
     {
         ++PerfectCount;
+        NowScore += PerfectScore;
+        DispScore = (int)NowScore;
+        UpdateScoreDisplay();
     }
 
     public void JudgementDisplay(Judgement judgement)

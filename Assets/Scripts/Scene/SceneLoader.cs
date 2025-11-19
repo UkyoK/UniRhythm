@@ -5,16 +5,23 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
+    private const string _TitleScene = "TestSelectScene";
+
     public void LoadScene(string sceneName)
     {
         if (SettingManager.Instance.isFindData)
         {
             SceneManager.LoadScene(sceneName);
-            SettingManager.Instance.ResetIsFindData();
         }
-        else
+        else if (sceneName == _TitleScene)
         {
             Debug.LogWarning("楽曲データがセットされていません");
         }
+    }
+
+    public void LoadTitleScene()
+    {
+        SettingManager.Instance.ResetIsFindData();
+        SceneManager.LoadScene(_TitleScene);
     }
 }

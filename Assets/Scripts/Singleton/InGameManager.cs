@@ -40,7 +40,8 @@ public class InGameManager : MonoBehaviour
             MySoundManager.Instance.MusicStop();
             // リザルトシーンに行く
             // 今は仮で初期シーンに
-            SceneManager.LoadScene("TestSelectScene");
+            SceneManager.LoadScene("ResultScene");
+            Destroy(gameObject);
         }
     }
 
