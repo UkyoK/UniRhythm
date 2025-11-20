@@ -6,28 +6,35 @@ using UnityEditor;
 
 public class DebugStart
 {
-    [MenuItem("Debug/Start")]
+    [MenuItem("Debug/Debug Start")]
     private static void DebugSupporter()
     {
         EditorSceneManager.OpenScene("Assets/Scenes/TestSelectScene.unity");
         EditorApplication.EnterPlaymode();
     }
 
-    [MenuItem("Debug/Open TestScene")]
+    [MenuItem("Debug/Scene/TestScene")]
     private static void OpenTestScene()
     {
         EditorSceneManager.OpenScene("Assets/Scenes/TestScene.unity");
     }
 
-    [MenuItem("Debug/Open TestSelectScene")]
+    [MenuItem("Debug/Scene/TestSelectScene")]
     private static void OpenTestSelectScene()
     {
         EditorSceneManager.OpenScene("Assets/Scenes/TestSelectScene.unity");
     }
 
-    [MenuItem("Debug/Open ResultScene")]
+    [MenuItem("Debug/Scene/ResultScene")]
     private static void OpenResultScene()
     {
         EditorSceneManager.OpenScene("Assets/Scenes/OutGame/ResultScene.unity");
     }
+
+    [MenuItem("Debug/Scene/SongSelectScene")]
+    private static void OpenSongSelectScene()
+    {
+        EditorSceneManager.OpenScene("Assets/Scenes/OutGame/SongSelectScene.unity");
+    }
+
 }

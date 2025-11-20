@@ -47,7 +47,7 @@ public class ChartLoader : MonoBehaviour
     /// <summary>
     /// 曲のテンポ
     /// </summary>
-    int BPM;
+    float BPM;
 
     /// <summary>
     /// 開始時間調整

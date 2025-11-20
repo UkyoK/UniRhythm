@@ -43,6 +43,15 @@ namespace Shine.Common
         Level,
     }
 
+    public struct SongInfo
+    {
+        public string Title;
+        public string Artist;
+        public float StartBPM;
+        public float Offset;
+        public string FolderName;
+    }
+
     public enum Difficulty
     {
         Easy,

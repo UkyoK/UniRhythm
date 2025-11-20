@@ -9,13 +9,17 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadScene(string sceneName)
     {
-        if (SettingManager.Instance.isFindData)
+        if (SettingManager.Instance.isFindData && sceneName == "SongSelectScene")
         {
             SceneManager.LoadScene(sceneName);
         }
         else if (sceneName == _TitleScene)
         {
             Debug.LogWarning("楽曲データがセットされていません");
+        }
+        else
+        {
+            SceneManager.LoadScene(sceneName);
         }
     }
 

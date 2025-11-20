@@ -42,7 +42,7 @@ public class SettingManager : MonoBehaviour
 
     public string ArtistName { get; private set; }
 
-    public int StartBPM { get; private set; }
+    public float StartBPM { get; private set; }
 
     public float Offset { get; private set; }
 
@@ -91,6 +91,21 @@ public class SettingManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    public void SetDefaultSetting(bool isMirror = false)
+    {
+        NoteSpeed = 8;
+        PerfectTime = 50;
+        GreatTime = 75;
+        MissTime = 100;
+        IsMirror = isMirror;
+        LocalOffset = 0.0f;
+
+        Lane1 = KeyCode.D;
+        Lane2 = KeyCode.F;
+        Lane3 = KeyCode.J;
+        Lane4 = KeyCode.K;
+    }
+
     public void LoadChartData(string songName)
     {
         string path = Application.dataPath + "/StreamingAssets/MusicDatas/music_datas.csv";
@@ -119,7 +134,7 @@ public class SettingManager : MonoBehaviour
             if(Title == songName)
             {
                 ArtistName = split[(int)MusicInfo.Artist];
-                StartBPM = int.Parse(split[(int)MusicInfo.StartBPM]);
+                StartBPM = float.Parse(split[(int)MusicInfo.StartBPM]);
                 Offset = float.Parse(split[(int)MusicInfo.Offset]);
                 FolderName = split[(int)MusicInfo.FolderName];
                 isFindData = true;
