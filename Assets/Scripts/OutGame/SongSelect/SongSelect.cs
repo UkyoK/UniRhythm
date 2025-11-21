@@ -26,7 +26,7 @@ public class SongSelect : MonoBehaviour
     TextMeshProUGUI[] ArtistList = new TextMeshProUGUI[_ArraySize];
     TextMeshProUGUI[] StartBPMList = new TextMeshProUGUI[_ArraySize];
 
-    DG.Tweening.Sequence sequence;
+    Sequence sequence;
 
     private int TopSong;
 
@@ -75,7 +75,7 @@ public class SongSelect : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.DownArrow) && isScroll)
+        if (Input.GetKey(KeyCode.DownArrow) && isScroll)
         {
             ++TopSong;
             if (TopSong >= SongInfoLoader.Instance.SongInfoList.Count)
@@ -86,7 +86,7 @@ public class SongSelect : MonoBehaviour
             UpdateSongList();
             SelectAnimationUp();
         }
-        if (Input.GetKeyDown(KeyCode.UpArrow) && isScroll)
+        if (Input.GetKey(KeyCode.UpArrow) && isScroll)
         {
             --TopSong;
             if (TopSong < 0)
