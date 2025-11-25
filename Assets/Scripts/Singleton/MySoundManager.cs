@@ -12,8 +12,12 @@ public class MySoundManager : MonoBehaviour
     private CriAtomSource atomSrc;
 
     private bool isMusicPlaying;
-    public void MusicStop()
+    /// <summary>
+    /// 曲の終了
+    /// </summary>
+    public void MusicPlayStop()
     {
+        atomSrc.Stop();
         isMusicPlaying = false;
     }
 
@@ -37,12 +41,6 @@ public class MySoundManager : MonoBehaviour
         atomSrc = gameObject.GetComponent<CriAtomSource>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void PlayMusic()
     {
         // 再生中なら処理しない
@@ -59,6 +57,18 @@ public class MySoundManager : MonoBehaviour
         // 曲の再生が開始されたら、キューをSE用のものに切り替え
         atomSrc.cueSheet = "InGame";
         atomSrc.cueName = "SE";
+    }
+
+    /// <summary>
+    /// 曲の停止
+    /// </summary>
+    public void StopMusic()
+    {
+        if (isMusicPlaying)
+        {
+            atomSrc.Stop();
+            isMusicPlaying = false;
+        }
     }
 
     /// <summary>

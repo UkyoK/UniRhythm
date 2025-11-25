@@ -75,6 +75,9 @@ public class LaneInput : MonoBehaviour
                 Debug.Log("Miss...");
                 Destroy(childA);
 
+                MySoundManager.Instance.PlaySE(Judgement.Miss);
+                ScoreManager.Instance.JudgementDisplay(Judgement.Miss);
+
                 // ”»’èƒm[ƒc‚ğB‚ÉØ‚è‘Ö‚¦
                 childA = childB;
                 hitNoteA = hitNoteB;
@@ -150,6 +153,9 @@ public class LaneInput : MonoBehaviour
             ScoreManager.Instance.Miss();
             Debug.Log("Miss...");
             Destroy(childA);
+
+            MySoundManager.Instance.PlaySE(Judgement.Miss);
+            ScoreManager.Instance.JudgementDisplay(Judgement.Miss);
         }
 
     }

@@ -31,7 +31,6 @@ namespace Shine.Common
         }
     }
 
-
     public enum MusicInfo
     {
         Title,
@@ -39,8 +38,36 @@ namespace Shine.Common
         StartBPM,
         Offset,
         FolderName,
-        Difficulty,
-        Level,
+        /*
+        EasyLevel,
+        NormalLevel,
+        ExpertLevel,
+        MasterLevel,
+        */
+    }
+
+    public enum Difficulty
+    {
+        Easy,
+        Normal,
+        Expert,
+        Master,
+    }
+
+    public struct DifficultyLevel
+    {
+        public int EasyLevel;
+        public int NormalLevel;
+        public int ExpertLevel;
+        public int MasterLevel;
+
+        public DifficultyLevel(int easy, int normal, int expert, int master)
+        {
+            this.EasyLevel = easy;
+            this.NormalLevel = normal;
+            this.ExpertLevel = expert;
+            this.MasterLevel = master;
+        }
     }
 
     public struct SongInfo
@@ -50,14 +77,9 @@ namespace Shine.Common
         public float StartBPM;
         public float Offset;
         public string FolderName;
-    }
-
-    public enum Difficulty
-    {
-        Easy,
-        Normal,
-        Expert,
-        Master,
+        /*
+        public DifficultyLevel Level;
+        */
     }
 
     /// <summary>

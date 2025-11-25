@@ -36,6 +36,8 @@ public class SongInfoLoader : MonoBehaviour
 
     void LoadMusicInfoData()
     {
+        // csvだと","が文字列として扱いづらいので、あとでjsonファイルにする。
+
         string path = Application.dataPath + "/StreamingAssets/MusicDatas/music_datas.csv";
 
         if (!File.Exists(path))
@@ -56,7 +58,9 @@ public class SongInfoLoader : MonoBehaviour
 
             SongInfo songInfo = new SongInfo();
             songInfo.Title = split[(int)MusicInfo.Title];
+            songInfo.Title = songInfo.Title.Replace("，", ",");  // 文字列に含まれるカンマは全角で入力するので、半角に変換
             songInfo.Artist = split[(int)MusicInfo.Artist];
+            songInfo.Artist = songInfo.Artist.Replace("，", ",");
             songInfo.StartBPM = float.Parse(split[(int)MusicInfo.StartBPM]);
             songInfo.Offset = float.Parse(split[(int)MusicInfo.Offset]);
             songInfo.FolderName = split[(int)MusicInfo.FolderName];

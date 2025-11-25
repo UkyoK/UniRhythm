@@ -14,6 +14,9 @@ public class ScoreManager : MonoBehaviour
     private const string _InGameScene = "TestScene";
     private const string _ResultScene = "ResultScene";
 
+    private const float _ScreenWidth = 1280.0f;
+    private const float _ScreenHeight = 720.0f;
+
     public int Combo { get; private set; }
     public int MaxCombo { get; private set; }
     public int PerfectCount { get; private set; }
@@ -104,7 +107,7 @@ public class ScoreManager : MonoBehaviour
     public void InGameDisplay()
     {
         Parent = JudgeCanvas.transform;
-        ObjectPos = new Vector3(1280.0f / 2.0f, 720.0f / 2.0f - 30.0f, 0.0f);
+        ObjectPos = new Vector3(_ScreenWidth / 2.0f, _ScreenHeight / 2.0f - 30.0f, 0.0f);
 
         ComboDisp = ComboObject.GetComponent<TextMeshProUGUI>();
         ComboDisp.text = "0";

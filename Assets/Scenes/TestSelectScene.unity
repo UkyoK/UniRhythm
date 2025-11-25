@@ -873,8 +873,16 @@ MonoBehaviour:
     awbFile: 
     loaderStatus: 0
   - name: Calamity_Fortune
-    acbFile: CRIWARE\Calamity_Fortune.acb
-    awbFile: CRIWARE\Calamity_Fortune.awb
+    acbFile: CRIWARE\Music\Calamity_Fortune.acb
+    awbFile: CRIWARE\Music\Calamity_Fortune.awb
+    loaderStatus: 0
+  - name: Shining_Star
+    acbFile: CRIWARE\Music\Shining_Star.acb
+    awbFile: CRIWARE\Music\Shining_Star.awb
+    loaderStatus: 0
+  - name: Dogbite
+    acbFile: CRIWARE\Music\Dogbite.acb
+    awbFile: CRIWARE\Music\Dogbite.awb
     loaderStatus: 0
   dspBusSetting: 
   dontDestroyOnLoad: 0

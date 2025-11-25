@@ -18,19 +18,58 @@ public class SongSelect : MonoBehaviour
     [SerializeField] GameObject Panel6;
 
     private const int _ArraySize = 7;
+    private const int _CenterSongID = 3;
 
+    /// <summary>
+    /// 表示する曲データ配列
+    /// </summary>
     SongInfo[] DisplaySongInfo = new SongInfo[_ArraySize];
+
+    /// <summary>
+    /// 表示用パネルオブジェクト
+    /// </summary>
     GameObject[] PanelList = new GameObject[_ArraySize];
+
+    /// <summary>
+    /// 表示用パネルRectTransform
+    /// </summary>
     RectTransform[] RectList = new RectTransform[_ArraySize];
+
+    /// <summary>
+    /// 表示用タイトル
+    /// </summary>
     TextMeshProUGUI[] TitleList = new TextMeshProUGUI[_ArraySize];
+
+    /// <summary>
+    /// 表示用アーティスト
+    /// </summary>
     TextMeshProUGUI[] ArtistList = new TextMeshProUGUI[_ArraySize];
+
+    /// <summary>
+    /// 表示用BPM
+    /// </summary>
     TextMeshProUGUI[] StartBPMList = new TextMeshProUGUI[_ArraySize];
 
-    Sequence sequence;
+    private Sequence sequence;
 
+    /// <summary>
+    /// DOTween動作時間
+    /// </summary>
+    private const float _duration = 0.25f;
+
+    /// <summary>
+    /// パネル0に表示される曲のID
+    /// </summary>
     private int TopSong;
 
+    /// <summary>
+    /// スクロール処理を行うかどうか
+    /// </summary>
     private bool isScroll;
+
+    /// <summary>
+    /// スクロールを許可する
+    /// </summary>
     private void ArrowScroll() { isScroll = true; }
 
     void Awake()
@@ -52,6 +91,7 @@ public class SongSelect : MonoBehaviour
             }
             else
             {
+                // 残りは先頭から順に入れる
                 DisplaySongInfo[i] = SongInfoLoader.Instance.SongInfoList[i - 1];
             }
             TopSong = SongInfoLoader.Instance.SongInfoList.Count - 1;
@@ -72,7 +112,6 @@ public class SongSelect : MonoBehaviour
         isScroll = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKey(KeyCode.DownArrow) && isScroll)
@@ -100,11 +139,10 @@ public class SongSelect : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return) && isScroll)
         {
             SettingManager.Instance.SetDefaultSetting();
-            SettingManager.Instance.LoadChartData(DisplaySongInfo[3].Title);
-            SceneManager.LoadScene("TestScene");
+            SettingManager.Instance.LoadChartData(DisplaySongInfo[_CenterSongID].Title);
+            SceneManager.LoadScene("InGameScene");
         }
 
-        int top = TopSong;
     }
 
     void UpdateSongList()
@@ -122,9 +160,6 @@ public class SongSelect : MonoBehaviour
             TitleList[i].text = DisplaySongInfo[i].Title;
             ArtistList[i].text = DisplaySongInfo[i].Artist;
             StartBPMList[i].text = DisplaySongInfo[i].StartBPM.ToString();
-
-            TitleList[i].rectTransform.sizeDelta = new Vector2(TitleList[i].preferredWidth, TitleList[i].rectTransform.sizeDelta.y);
-            ArtistList[i].rectTransform.sizeDelta = new Vector2(ArtistList[i].preferredWidth, ArtistList[i].rectTransform.sizeDelta.y);
         }
 
         isScroll = false;
@@ -135,12 +170,12 @@ public class SongSelect : MonoBehaviour
         sequence.Kill(true);
 
         sequence = DOTween.Sequence()
-            .Append(RectList[0].DOAnchorPos(new Vector2(-60, 286), 0.5f).From())
-            .Join(RectList[1].DOAnchorPos(new Vector2(-30, 143), 0.5f).From())
-            .Join(RectList[2].DOAnchorPos(new Vector2(0, 0), 0.5f).From())
-            .Join(RectList[3].DOAnchorPos(new Vector2(-30, -143), 0.5f).From())
-            .Join(RectList[4].DOAnchorPos(new Vector2(-60, -286), 0.5f).From())
-            .Join(RectList[5].DOAnchorPos(new Vector2(-90, -429), 0.5f).From())
+            .Append(RectList[0].DOAnchorPos(new Vector2(-60, 286), _duration).From())
+            .Join(RectList[1].DOAnchorPos(new Vector2(-30, 143), _duration).From())
+            .Join(RectList[2].DOAnchorPos(new Vector2(0, 0), _duration).From())
+            .Join(RectList[3].DOAnchorPos(new Vector2(-30, -143), _duration).From())
+            .Join(RectList[4].DOAnchorPos(new Vector2(-60, -286), _duration).From())
+            .Join(RectList[5].DOAnchorPos(new Vector2(-90, -429), _duration).From())
             .OnComplete(ArrowScroll);
     }
 
@@ -149,12 +184,12 @@ public class SongSelect : MonoBehaviour
         sequence.Kill(true);
 
         sequence = DOTween.Sequence()
-            .Append(RectList[1].DOAnchorPos(new Vector2(-90, 429), 0.5f).From())
-            .Join(RectList[2].DOAnchorPos(new Vector2(-60, 286), 0.5f).From())
-            .Join(RectList[3].DOAnchorPos(new Vector2(-30, 143), 0.5f).From())
-            .Join(RectList[4].DOAnchorPos(new Vector2(0, 0), 0.5f).From())
-            .Join(RectList[5].DOAnchorPos(new Vector2(-30, -143), 0.5f).From())
-            .Join(RectList[6].DOAnchorPos(new Vector2(-60, -286), 0.5f).From())
+            .Append(RectList[1].DOAnchorPos(new Vector2(-90, 429), _duration).From())
+            .Join(RectList[2].DOAnchorPos(new Vector2(-60, 286), _duration).From())
+            .Join(RectList[3].DOAnchorPos(new Vector2(-30, 143), _duration).From())
+            .Join(RectList[4].DOAnchorPos(new Vector2(0, 0), _duration).From())
+            .Join(RectList[5].DOAnchorPos(new Vector2(-30, -143), _duration).From())
+            .Join(RectList[6].DOAnchorPos(new Vector2(-60, -286), _duration).From())
             .OnComplete(ArrowScroll);
     }
 

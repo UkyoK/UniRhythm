@@ -35,11 +35,20 @@ public class InGameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Time.time > EndTime)
+        // 譜面データが見つからなかった場合、曲を止めて選曲画面に戻る
+        if (!ChartLoader.Instance.isFindData)
         {
-            MySoundManager.Instance.MusicStop();
-            // リザルトシーンに行く
-            // 今は仮で初期シーンに
+            MySoundManager.Instance.StopMusic();
+            Debug.LogError("譜面データがセットされていません\n選曲画面に戻ります");
+            SceneManager.LoadScene("SongSelectScene");
+            Destroy(gameObject);
+            return;
+        }
+
+        // 曲が終わったらリザルトシーンに進む
+        if (Time.time > EndTime)
+        {
+            MySoundManager.Instance.MusicPlayStop();
             SceneManager.LoadScene("ResultScene");
             Destroy(gameObject);
         }

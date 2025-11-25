@@ -13,10 +13,10 @@ public class DebugStart
         EditorApplication.EnterPlaymode();
     }
 
-    [MenuItem("Debug/Scene/TestScene")]
+    [MenuItem("Debug/Scene/InGameScene")]
     private static void OpenTestScene()
     {
-        EditorSceneManager.OpenScene("Assets/Scenes/TestScene.unity");
+        EditorSceneManager.OpenScene("Assets/Scenes/InGame/InGameScene.unity");
     }
 
     [MenuItem("Debug/Scene/TestSelectScene")]

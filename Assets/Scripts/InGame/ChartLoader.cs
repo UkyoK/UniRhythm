@@ -81,6 +81,8 @@ public class ChartLoader : MonoBehaviour
     [SerializeField]
     bool IsMirror;
 
+    public bool isFindData { get; private set; }
+
     string Path;
 
     void Awake()
@@ -93,6 +95,7 @@ public class ChartLoader : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        isFindData = false;
 
         AllNotesValue = 0;
         BeatNumerator = 4;
@@ -116,6 +119,8 @@ public class ChartLoader : MonoBehaviour
 
     void LoadChartFile()
     {
+        isFindData = false;
+
         if (!File.Exists(Path))
         {
             Debug.LogError("ïàñ ÉfÅ[É^Ç™å©Ç¬Ç©ÇËÇ‹ÇπÇÒÇ≈ÇµÇΩ");
@@ -155,6 +160,7 @@ public class ChartLoader : MonoBehaviour
             }
         }
 
+        isFindData = true;
     }
 
     void ChartMaker(int measureNum, int laneNum, string body)
