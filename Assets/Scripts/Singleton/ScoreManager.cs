@@ -94,6 +94,8 @@ public class ScoreManager : MonoBehaviour
         NowScore = 0.0f;
         DispScore = 0;
 
+        float totalscore = PerfectScore * ChartLoader.Instance.AllNotesValue;
+
         if (SceneManager.GetActiveScene().name == _InGameScene)
         {
             InGameDisplay();
@@ -188,6 +190,18 @@ public class ScoreManager : MonoBehaviour
         ++PerfectCount;
         NowScore += PerfectScore;
         DispScore = (int)NowScore;
+
+        // ƒXƒRƒA‚ÌŒë·‚ª”­¶‚µ‚½‚çŒŠ–„‚ß‚·‚é
+        if ((PerfectScore * (PerfectCount + GreatCount + MissCount)) - DispScore > 0)
+        {
+            NowScore += 1;
+            DispScore = (int)NowScore;
+        }
+        if (DispScore > MaxScore)
+        {
+            DispScore = (int)MaxScore;
+        }
+
         UpdateScoreDisplay();
     }
 
