@@ -112,7 +112,7 @@ public class ChartLoader : MonoBehaviour
         Path = Application.dataPath + "/StreamingAssets/MusicDatas/Music/" + SettingManager.Instance.FolderName + ".csv";
 
         StartTime = Time.time + SettingManager.Instance.LocalOffset;
-        TotalTime = Offset;
+        TotalTime = Offset + Fade.Instance.FadeTime;
 
         ChangedMeasure = 1;
 

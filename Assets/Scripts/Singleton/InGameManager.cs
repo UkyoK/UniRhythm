@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,8 +29,9 @@ public class InGameManager : MonoBehaviour
         EndTime = Time.time + 10000;
     }
 
-    private void Start()
+    private async void Start()
     {
+        await UniTask.Delay(TimeSpan.FromSeconds(Fade.Instance.FadeTime));
         MySoundManager.Instance.PlayMusic();
     }
 
@@ -49,7 +52,7 @@ public class InGameManager : MonoBehaviour
         if (Time.time > EndTime)
         {
             MySoundManager.Instance.MusicPlayStop();
-            SceneManager.LoadScene("ResultScene");
+            Fade.Instance.FadeOut("ResultScene");
             Destroy(gameObject);
         }
     }

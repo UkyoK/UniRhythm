@@ -140,7 +140,7 @@ public class SongSelect : MonoBehaviour
         {
             SettingManager.Instance.SetDefaultSetting();
             SettingManager.Instance.LoadChartData(DisplaySongInfo[_CenterSongID].Title);
-            SceneManager.LoadScene("InGameScene");
+            Fade.Instance.FadeOut("InGameScene");
         }
 
     }

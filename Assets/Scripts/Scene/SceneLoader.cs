@@ -11,7 +11,7 @@ public class SceneLoader : MonoBehaviour
     {
         if (SettingManager.Instance.isFindData && sceneName == "SongSelectScene")
         {
-            SceneManager.LoadScene(sceneName);
+            Fade.Instance.FadeOut(sceneName);
         }
         else if (sceneName == _TitleScene)
         {
@@ -19,7 +19,7 @@ public class SceneLoader : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene(sceneName);
+            Fade.Instance.FadeOut(sceneName);
         }
     }
 
