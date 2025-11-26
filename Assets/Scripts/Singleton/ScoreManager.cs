@@ -11,7 +11,7 @@ public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance;
 
-    private const string _InGameScene = "TestScene";
+    private const string _InGameScene = "InGameScene";
     private const string _ResultScene = "ResultScene";
 
     private const float _ScreenWidth = 1280.0f;

@@ -61,14 +61,19 @@ public class ChartLoader : MonoBehaviour
     float StartTime;
 
     /// <summary>
-    /// 拍の分子
+    /// 合計時間
     /// </summary>
-    int BeatNumerator;
+    float TotalTime;
 
     /// <summary>
-    /// 拍の分母
+    /// 情報が更新された小節
     /// </summary>
-    int BeatDenominator;
+    int ChangedMeasure;
+
+    /// <summary>
+    /// 拍数
+    /// </summary>
+    int Beat;
 
     /// <summary>
     /// ノーツ数の合計
@@ -98,8 +103,7 @@ public class ChartLoader : MonoBehaviour
         isFindData = false;
 
         AllNotesValue = 0;
-        BeatNumerator = 4;
-        BeatDenominator = 4;
+        Beat = 4;
 
         Title = SettingManager.Instance.Title;
         Artist = SettingManager.Instance.ArtistName;
@@ -108,6 +112,9 @@ public class ChartLoader : MonoBehaviour
         Path = Application.dataPath + "/StreamingAssets/MusicDatas/Music/" + SettingManager.Instance.FolderName + ".csv";
 
         StartTime = Time.time + SettingManager.Instance.LocalOffset;
+        TotalTime = Offset;
+
+        ChangedMeasure = 1;
 
         LoadChartFile();
     }
@@ -139,21 +146,26 @@ public class ChartLoader : MonoBehaviour
 
             ChartInfoType infoType = (ChartInfoType)Enum.Parse(typeof(ChartInfoType), split[(int)ChartType.Info]);
 
-            switch(infoType)
+            int measureNum = int.Parse(split[(int)ChartType.Measure]);
+            switch (infoType)
             {
                 case ChartInfoType.Note:
-                    int measureNum = int.Parse(split[(int)ChartType.Measure]);
                     int laneNum = int.Parse(split[(int)ChartType.Lane]);
                     string body = split[(int)ChartType.Body];
-                    ChartMaker(measureNum, laneNum, body);
+                    MakeChart(measureNum, laneNum, body);
+                    break;
+                case ChartInfoType.MeasureChange:
+                    int newBeat = int.Parse(split[(int)ChartType.Body]);
+                    ChangeMeasure(measureNum, newBeat);
                     break;
                 case ChartInfoType.BPMChange:
-                    BPM = int.Parse(split[(int)ChartType.Body]);
+                    float newBPM = float.Parse(split[(int)ChartType.Body]);
+                    ChangeBPM(measureNum, newBPM);
                     break;
                 case ChartInfoType.SceneChange:
-                    int endMeasureNum = int.Parse(split[(int)ChartType.Measure]);
-                    float measureSec = (60.0f / BPM) * 4.0f;
-                    InGameManager.Instance.SetEndTime(measureSec * (endMeasureNum - 1) + Offset + StartTime);
+                    float measureSec = (60.0f / BPM) * Beat;
+                    float endTime = measureSec * (measureNum - ChangedMeasure) + TotalTime + StartTime;
+                    InGameManager.Instance.SetEndTime(endTime);
                     break;
                 default:
                     break;
@@ -163,13 +175,14 @@ public class ChartLoader : MonoBehaviour
         isFindData = true;
     }
 
-    void ChartMaker(int measureNum, int laneNum, string body)
+    void MakeChart(int measureNum, int laneNum, string body)
     {
         // 文字列を分割して配列にする
         char[] noteArray = body.ToCharArray();
+        // 現在のBPMから1小節あたりの時間を計算
+        float measureSec = (60.0f / BPM) * Beat;
         // 小節頭の時間を取得
-        float measureSec = (60.0f / BPM) * 4.0f;
-        float nowMeasureTime = measureSec * (measureNum - 1) + Offset;
+        float nowMeasureTime = measureSec * (measureNum - ChangedMeasure) + TotalTime;
         // 1音符あたりの時間を計算
         float divisionSec = measureSec / noteArray.Length;
 
@@ -236,9 +249,22 @@ public class ChartLoader : MonoBehaviour
         hitNote.Initialize(posX, justTime, SettingManager.Instance.NoteSpeed);
     }
 
-    // Update is called once per frame
-    void Update()
+    void ChangeBPM(int measureNum, float newBPM)
     {
+        float measureSec = (60.0f / BPM) * Beat;
+        TotalTime = measureSec * (measureNum - ChangedMeasure) + TotalTime;
 
+        BPM = newBPM;
+        ChangedMeasure = measureNum;
     }
+
+    void ChangeMeasure(int measureNum, int newBeat)
+    {
+        float measureSec = (60.0f / BPM) * Beat;
+        TotalTime = measureSec * (measureNum - ChangedMeasure) + TotalTime;
+
+        Beat = newBeat;
+        ChangedMeasure = measureNum;
+    }
+
 }
