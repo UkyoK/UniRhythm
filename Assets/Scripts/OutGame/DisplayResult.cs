@@ -41,6 +41,8 @@ public class DisplayResult : MonoBehaviour
         ScoreDisp = ScoreObject.GetComponent<TextMeshProUGUI>();
         ScoreDisp.text = ScoreManager.Instance.DispScore.ToString();
 
+        Fade.Instance.FadeIn();
+
     }
 
     // Update is called once per frame

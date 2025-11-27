@@ -1,4 +1,5 @@
 using Shine.Common;
+using Shine.Json;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -38,7 +39,7 @@ public class SongInfoLoader : MonoBehaviour
     {
         // csvだと","が文字列として扱いづらいので、あとでjsonファイルにする。
 
-        string path = Application.dataPath + "/StreamingAssets/MusicDatas/music_datas.csv";
+        string path = Application.dataPath + "/StreamingAssets/MusicDatas/music_datas.json";
 
         if (!File.Exists(path))
         {
@@ -46,27 +47,25 @@ public class SongInfoLoader : MonoBehaviour
             return;
         }
 
-        FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
-        StreamReader sr = new StreamReader(fs);
+        string json = File.ReadAllText(path);
+        Data data = JsonUtility.FromJson<Data>(json);
 
-        sr.ReadLine();  // 1行目はスキップ(あとでファイル形式チェック処理にする)
-
-        while (sr.Peek() != -1)
+        foreach (MusicData musicData in data.MusicDatas)
         {
-            string line = sr.ReadLine();
-            string[] split = line.Split(',');
+            SongInfo info = new SongInfo();
+            info.Title = musicData.Title;
+            info.Artist = musicData.Artist;
+            info.StartBPM = float.Parse(musicData.StartBPM);
+            info.Offset = float.Parse(musicData.Offset);
+            info.FolderName = musicData.FolderName;
+            info.EasyLevel = musicData.Levels.Easy;
+            info.NormalLevel = musicData.Levels.Normal;
+            info.ExpertLevel = musicData.Levels.Expert;
+            info.MasterLevel = musicData.Levels.Master;
 
-            SongInfo songInfo = new SongInfo();
-            songInfo.Title = split[(int)MusicInfo.Title];
-            songInfo.Title = songInfo.Title.Replace("，", ",");  // 文字列に含まれるカンマは全角で入力するので、半角に変換
-            songInfo.Artist = split[(int)MusicInfo.Artist];
-            songInfo.Artist = songInfo.Artist.Replace("，", ",");
-            songInfo.StartBPM = float.Parse(split[(int)MusicInfo.StartBPM]);
-            songInfo.Offset = float.Parse(split[(int)MusicInfo.Offset]);
-            songInfo.FolderName = split[(int)MusicInfo.FolderName];
-
-            SongInfoList.Add(songInfo);
+            SongInfoList.Add(info);
         }
+
 
         Debug.Log("楽曲一覧データの読み込みが完了しました");
     }

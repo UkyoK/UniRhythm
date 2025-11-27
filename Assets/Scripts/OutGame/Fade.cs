@@ -12,7 +12,6 @@ public class Fade : MonoBehaviour
     private GameObject FadeObject;
     private Image FadeImage;
 
-    [SerializeField]
     public float FadeTime = 0.5f;
 
     private void Awake()
@@ -20,16 +19,15 @@ public class Fade : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(this);
         }
         else
         {
             Destroy(gameObject);
         }
 
-        FadeObject = this.gameObject;
-        FadeImage = FadeObject.GetComponent<Image>();
-
-        FadeObject.SetActive(true);
+        FadeObject = gameObject;
+        FadeImage = GetComponentInChildren<Image>();
     }
 
     void Start()
@@ -37,24 +35,18 @@ public class Fade : MonoBehaviour
         FadeIn();
     }
 
-    public void FadeIn()
+    public async void FadeIn()
     {
-        FadeObject.SetActive(true);
         FadeImage.color = Color.black;
-        FadeImage.DOFade(0.0f, FadeTime).OnComplete(() =>
-        {
-            FadeObject.SetActive(false);
-        });
+        await FadeImage.DOFade(0.0f, FadeTime).AsyncWaitForCompletion();
+        FadeObject.SetActive(false);
     }
 
-    public void FadeOut(string sceneName)
+    public async void FadeOut(string sceneName)
     {
         FadeObject.SetActive(true);
-        FadeImage.DOFade(1.0f, FadeTime).OnComplete(() =>
-        {
-            Destroy(this);
-            SceneManager.LoadScene(sceneName);
-        });
+        await FadeImage.DOFade(1.0f, FadeTime).AsyncWaitForCompletion();
+        SceneManager.LoadScene(sceneName);
     }
 
 

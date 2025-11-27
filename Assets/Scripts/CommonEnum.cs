@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,12 +39,11 @@ namespace Shine.Common
         StartBPM,
         Offset,
         FolderName,
-        /*
         EasyLevel,
         NormalLevel,
         ExpertLevel,
         MasterLevel,
-        */
+        MAX
     }
 
     public enum Difficulty
@@ -54,22 +54,6 @@ namespace Shine.Common
         Master,
     }
 
-    public struct DifficultyLevel
-    {
-        public int EasyLevel;
-        public int NormalLevel;
-        public int ExpertLevel;
-        public int MasterLevel;
-
-        public DifficultyLevel(int easy, int normal, int expert, int master)
-        {
-            this.EasyLevel = easy;
-            this.NormalLevel = normal;
-            this.ExpertLevel = expert;
-            this.MasterLevel = master;
-        }
-    }
-
     public struct SongInfo
     {
         public string Title;
@@ -77,9 +61,10 @@ namespace Shine.Common
         public float StartBPM;
         public float Offset;
         public string FolderName;
-        /*
-        public DifficultyLevel Level;
-        */
+        public int EasyLevel;
+        public int NormalLevel;
+        public int ExpertLevel;
+        public int MasterLevel;
     }
 
     /// <summary>
@@ -122,5 +107,34 @@ namespace Shine.Common
         BPM,
         Offset,
         Path,
+    }
+}
+
+namespace Shine.Json
+{
+    [Serializable]
+    public class Level
+    {
+        public int Easy;
+        public int Normal;
+        public int Expert;
+        public int Master;
+    }
+
+    [Serializable]
+    public class MusicData
+    {
+        public string Title;
+        public string Artist;
+        public string StartBPM;
+        public string Offset;
+        public string FolderName;
+        public Level Levels;
+    }
+
+    [Serializable]
+    public class Data
+    {
+        public MusicData[] MusicDatas;
     }
 }

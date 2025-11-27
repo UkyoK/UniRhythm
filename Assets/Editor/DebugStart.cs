@@ -6,32 +6,32 @@ using UnityEditor;
 
 public class DebugStart
 {
-    [MenuItem("Debug/Debug Start")]
+    [MenuItem("UniRhythm/Debug Start", priority = 1)]
     private static void DebugSupporter()
     {
         EditorSceneManager.OpenScene("Assets/Scenes/TestSelectScene.unity");
         EditorApplication.EnterPlaymode();
     }
 
-    [MenuItem("Debug/Scene/InGameScene")]
+    [MenuItem("UniRhythm/Scene/InGameScene", priority = 103)]
     private static void OpenTestScene()
     {
         EditorSceneManager.OpenScene("Assets/Scenes/InGame/InGameScene.unity");
     }
 
-    [MenuItem("Debug/Scene/TestSelectScene")]
+    [MenuItem("UniRhythm/Scene/TestSelectScene", priority = 101)]
     private static void OpenTestSelectScene()
     {
         EditorSceneManager.OpenScene("Assets/Scenes/TestSelectScene.unity");
     }
 
-    [MenuItem("Debug/Scene/ResultScene")]
+    [MenuItem("UniRhythm/Scene/ResultScene", priority = 104)]
     private static void OpenResultScene()
     {
         EditorSceneManager.OpenScene("Assets/Scenes/OutGame/ResultScene.unity");
     }
 
-    [MenuItem("Debug/Scene/SongSelectScene")]
+    [MenuItem("UniRhythm/Scene/SongSelectScene", priority = 102)]
     private static void OpenSongSelectScene()
     {
         EditorSceneManager.OpenScene("Assets/Scenes/OutGame/SongSelectScene.unity");

@@ -82,7 +82,11 @@ public class SongSelect : MonoBehaviour
         PanelList[5] = Panel5;
         PanelList[6] = Panel6;
 
-        for (int i = 0; i < _ArraySize; i++)
+        TopSong = SongInfoLoader.Instance.SongInfoList.Count - 1;
+
+        int songID = 0;
+
+        for (int i = 0; i < _ArraySize; ++i, ++songID)
         {
             if (i == 0)
             {
@@ -91,10 +95,13 @@ public class SongSelect : MonoBehaviour
             }
             else
             {
+                if (songID >= SongInfoLoader.Instance.SongInfoList.Count)
+                {
+                    songID = 0;
+                }
                 // 残りは先頭から順に入れる
-                DisplaySongInfo[i] = SongInfoLoader.Instance.SongInfoList[i - 1];
+                DisplaySongInfo[i] = SongInfoLoader.Instance.SongInfoList[songID];
             }
-            TopSong = SongInfoLoader.Instance.SongInfoList.Count - 1;
 
             RectList[i] = PanelList[i].GetComponent<RectTransform>();
 
@@ -110,6 +117,11 @@ public class SongSelect : MonoBehaviour
         Debug.Log("表示用データ読み込み完了");
 
         isScroll = true;
+    }
+
+    void Start()
+    {
+        Fade.Instance.FadeIn();
     }
 
     void Update()
@@ -147,12 +159,13 @@ public class SongSelect : MonoBehaviour
 
     void UpdateSongList()
     {
-        for (int i = 0; i < _ArraySize; ++i)
+        int songID = TopSong + 1;
+
+        for (int i = 0; i < _ArraySize; ++i, ++songID)
         {
-            int songID = i + TopSong;
-            if (songID > SongInfoLoader.Instance.SongInfoList.Count - 1)
+            if (songID >= SongInfoLoader.Instance.SongInfoList.Count)
             {
-                songID -= SongInfoLoader.Instance.SongInfoList.Count;
+                songID = 0;
             }
 
             DisplaySongInfo[i] = SongInfoLoader.Instance.SongInfoList[songID];
