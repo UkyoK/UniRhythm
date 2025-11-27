@@ -67,11 +67,6 @@ public class SongSelect : MonoBehaviour
     /// </summary>
     private bool isScroll;
 
-    /// <summary>
-    /// ÉXÉNÉçÅ[ÉãÇãñâ¬Ç∑ÇÈ
-    /// </summary>
-    private void ArrowScroll() { isScroll = true; }
-
     void Awake()
     {
         PanelList[0] = Panel0;
@@ -178,32 +173,32 @@ public class SongSelect : MonoBehaviour
         isScroll = false;
     }
 
-    void SelectAnimationUp()
+    async void SelectAnimationUp()
     {
-        sequence.Kill(true);
-
-        sequence = DOTween.Sequence()
+        await DOTween.Sequence()
             .Append(RectList[0].DOAnchorPos(new Vector2(-60, 286), _duration).From())
             .Join(RectList[1].DOAnchorPos(new Vector2(-30, 143), _duration).From())
             .Join(RectList[2].DOAnchorPos(new Vector2(0, 0), _duration).From())
             .Join(RectList[3].DOAnchorPos(new Vector2(-30, -143), _duration).From())
             .Join(RectList[4].DOAnchorPos(new Vector2(-60, -286), _duration).From())
             .Join(RectList[5].DOAnchorPos(new Vector2(-90, -429), _duration).From())
-            .OnComplete(ArrowScroll);
+            .AsyncWaitForCompletion();
+
+        isScroll = true;
     }
 
-    void SelectAnimationDown()
+    async void SelectAnimationDown()
     {
-        sequence.Kill(true);
-
-        sequence = DOTween.Sequence()
+        await DOTween.Sequence()
             .Append(RectList[1].DOAnchorPos(new Vector2(-90, 429), _duration).From())
             .Join(RectList[2].DOAnchorPos(new Vector2(-60, 286), _duration).From())
             .Join(RectList[3].DOAnchorPos(new Vector2(-30, 143), _duration).From())
             .Join(RectList[4].DOAnchorPos(new Vector2(0, 0), _duration).From())
             .Join(RectList[5].DOAnchorPos(new Vector2(-30, -143), _duration).From())
             .Join(RectList[6].DOAnchorPos(new Vector2(-60, -286), _duration).From())
-            .OnComplete(ArrowScroll);
+            .AsyncWaitForCompletion();
+
+        isScroll = true;
     }
 
 }
