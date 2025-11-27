@@ -43,31 +43,31 @@ public class MusicDataCreater : EditorWindow
 
     private void OnGUI()
     {
-
         // ファイルを開く
         if (GUILayout.Button("Jsonファイルを開く"))
         {
             InputPath = EditorUtility.OpenFilePanel("Select Json File", Application.dataPath + _path, "json");
             LoadJson();
         }
-
         if (GUILayout.Button("csvから開く"))
         {
             InputPath = EditorUtility.OpenFilePanel("Select Json File", Application.dataPath + _path, "csv");
             LoadCSV();
         }
 
+        // データ編集部分
         ListScrollPos = GUILayout.BeginScrollView(ListScrollPos, false, true);
-        // 自身のSerializedObjectを取得
         var so = new SerializedObject(this);
         so.Update();
         EditorGUILayout.PropertyField(so.FindProperty("MusicDatas"), true);
         so.ApplyModifiedProperties();
         GUILayout.EndScrollView();
 
+        // プレビュー
         if (GUILayout.Button("プレビュー更新"))
         {
-            UpdatePreview();
+            data.MusicDatas = MusicDatas.ToArray();
+            outputText = JsonUtility.ToJson(data, true);
         }
 
         PreviewScrollPos = GUILayout.BeginScrollView(PreviewScrollPos, false, true, GUILayout.Height(150.0f));
@@ -77,9 +77,11 @@ public class MusicDataCreater : EditorWindow
         }
         GUILayout.EndScrollView();
 
+        // ファイルを保存
         if (GUILayout.Button("Jsonファイルを保存"))
         {
-            UpdatePreview();
+            data.MusicDatas = MusicDatas.ToArray();
+            outputText = JsonUtility.ToJson(data, true);
 
             OutputPath = EditorUtility.SaveFilePanel("Save Asset", Application.dataPath + _path, "music_datas", "json");
             if (string.IsNullOrEmpty(OutputPath))
@@ -89,13 +91,6 @@ public class MusicDataCreater : EditorWindow
 
             File.WriteAllText(OutputPath, outputText);
         }
-    }
-
-    void UpdatePreview()
-    {
-        data.MusicDatas = MusicDatas.ToArray();
-
-        outputText = JsonUtility.ToJson(data, true);
     }
 
     void LoadJson()
@@ -164,8 +159,4 @@ public class MusicDataCreater : EditorWindow
 
     }
 
-    void SaveJson()
-    {
-
-    }
 }
