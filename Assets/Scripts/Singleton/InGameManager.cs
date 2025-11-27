@@ -32,7 +32,7 @@ public class InGameManager : MonoBehaviour
     private async void Start()
     {
         Fade.Instance.FadeIn();
-        await UniTask.Delay(TimeSpan.FromSeconds(Fade.Instance.FadeTime));
+        await UniTask.Delay(TimeSpan.FromSeconds(Fade.Instance.FadeTime + Fade.Instance.WaitTime));
         MySoundManager.Instance.PlayMusic();
     }
 

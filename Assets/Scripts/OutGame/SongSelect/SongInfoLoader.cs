@@ -16,6 +16,7 @@ public class SongInfoLoader : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -24,21 +25,14 @@ public class SongInfoLoader : MonoBehaviour
 
         SongInfoList = new List<SongInfo>();
 
-        DontDestroyOnLoad(gameObject);
-
         LoadMusicInfoData();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
+    /// <summary>
+    /// 曲一覧データ読み込み
+    /// </summary>
     void LoadMusicInfoData()
     {
-        // csvだと","が文字列として扱いづらいので、あとでjsonファイルにする。
-
         string path = Application.dataPath + "/StreamingAssets/MusicDatas/music_datas.json";
 
         if (!File.Exists(path))
@@ -50,6 +44,7 @@ public class SongInfoLoader : MonoBehaviour
         string json = File.ReadAllText(path);
         Data data = JsonUtility.FromJson<Data>(json);
 
+        // ゲーム内で使えるデータに変換
         foreach (MusicData musicData in data.MusicDatas)
         {
             SongInfo info = new SongInfo();
@@ -65,7 +60,6 @@ public class SongInfoLoader : MonoBehaviour
 
             SongInfoList.Add(info);
         }
-
 
         Debug.Log("楽曲一覧データの読み込みが完了しました");
     }

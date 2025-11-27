@@ -112,7 +112,7 @@ public class ChartLoader : MonoBehaviour
         Path = Application.dataPath + "/StreamingAssets/MusicDatas/Music/" + SettingManager.Instance.FolderName + ".csv";
 
         StartTime = Time.time + SettingManager.Instance.LocalOffset;
-        TotalTime = Offset + Fade.Instance.FadeTime;
+        TotalTime = Offset + Fade.Instance.FadeTime + Fade.Instance.WaitTime;
 
         ChangedMeasure = 1;
 
@@ -196,7 +196,7 @@ public class ChartLoader : MonoBehaviour
 
                 case '1':
                     float justTime = nowMeasureTime + (divisionSec * i) + StartTime;
-                    Note note = new Note(laneNum, justTime, false, NowJudgement.None);
+                    Note note = new Note(laneNum, justTime);
                     ++AllNotesValue;
                     NoteInstantiate(laneNum, justTime);
                     break;
@@ -249,6 +249,11 @@ public class ChartLoader : MonoBehaviour
         hitNote.Initialize(posX, justTime, SettingManager.Instance.NoteSpeed);
     }
 
+    /// <summary>
+    /// BPM変更
+    /// </summary>
+    /// <param name="measureNum">小節番号</param>
+    /// <param name="newBPM">変更後のBPM</param>
     void ChangeBPM(int measureNum, float newBPM)
     {
         float measureSec = (60.0f / BPM) * Beat;
@@ -258,6 +263,11 @@ public class ChartLoader : MonoBehaviour
         ChangedMeasure = measureNum;
     }
 
+    /// <summary>
+    /// 拍子変更
+    /// </summary>
+    /// <param name="measureNum">小節番号</param>
+    /// <param name="newBeat">変更後の拍子(n/4)</param>
     void ChangeMeasure(int measureNum, int newBeat)
     {
         float measureSec = (60.0f / BPM) * Beat;

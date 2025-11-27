@@ -20,15 +20,11 @@ namespace Shine.Common
     {
         public int lane;
         public float justTime;
-        public bool isJudged;
-        public NowJudgement judgement;
 
-        public Note(int lane, float justTime, bool isJudged, NowJudgement judgement)
+        public Note(int lane, float justTime)
         {
             this.lane = lane;
             this.justTime = justTime;
-            this.isJudged = isJudged;
-            this.judgement = judgement;
         }
     }
 
@@ -78,6 +74,9 @@ namespace Shine.Common
         Body,
     }
 
+    /// <summary>
+    /// 譜面コマンド
+    /// </summary>
     public enum ChartInfoType
     {
         Note,
@@ -97,17 +96,6 @@ namespace Shine.Common
         //Hold_End,
     }
 
-    /// <summary>
-    /// 楽曲データ情報
-    /// </summary>
-    public enum MusicDataType
-    {
-        Title,
-        Artist,
-        BPM,
-        Offset,
-        Path,
-    }
 }
 
 namespace Shine.Json

@@ -12,7 +12,11 @@ public class Fade : MonoBehaviour
     private GameObject FadeObject;
     private Image FadeImage;
 
+    [SerializeField]
     public float FadeTime = 0.5f;
+
+    [SerializeField]
+    public float WaitTime = 1.0f;
 
     private void Awake()
     {
