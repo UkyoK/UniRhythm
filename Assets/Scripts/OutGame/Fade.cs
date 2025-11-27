@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -14,9 +12,6 @@ public class Fade : MonoBehaviour
 
     [SerializeField]
     public float FadeTime = 0.5f;
-
-    [SerializeField]
-    public float WaitTime = 1.0f;
 
     private void Awake()
     {

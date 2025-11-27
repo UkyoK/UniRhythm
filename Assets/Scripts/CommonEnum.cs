@@ -1,21 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace Shine.Common
 {
-    public enum NowJudgement
-    {
-        None,
-        Perfect,
-        Great_Fast,
-        Great_Late,
-        Miss_Fast,
-        Miss_Late,
-        Miss_Pass,
-    }
-
+    /// <summary>
+    /// ノート構造体
+    /// </summary>
     public struct Note
     {
         public int lane;
@@ -28,6 +17,9 @@ namespace Shine.Common
         }
     }
 
+    /// <summary>
+    /// 曲情報列挙
+    /// </summary>
     public enum MusicInfo
     {
         Title,
@@ -42,6 +34,9 @@ namespace Shine.Common
         MAX
     }
 
+    /// <summary>
+    /// 難易度列挙
+    /// </summary>
     public enum Difficulty
     {
         Easy,
@@ -50,6 +45,9 @@ namespace Shine.Common
         Master,
     }
 
+    /// <summary>
+    /// 曲情報構造体
+    /// </summary>
     public struct SongInfo
     {
         public string Title;

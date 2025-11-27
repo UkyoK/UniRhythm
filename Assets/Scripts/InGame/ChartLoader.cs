@@ -1,13 +1,17 @@
 using Shine.Common;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
 public class ChartLoader : MonoBehaviour
 {
     public static ChartLoader Instance;
+
+    /// <summary>
+    /// シーン読み込み完了後の待機時間
+    /// </summary>
+    [SerializeField]
+    public float WaitTime = 1.0f;
 
     const float LANE1_POS_X = -1.5f;
     const float LANE2_POS_X = -0.5f;
@@ -26,6 +30,9 @@ public class ChartLoader : MonoBehaviour
     [SerializeField]
     GameObject Lane4;
 
+    /// <summary>
+    /// 譜面速度
+    /// </summary>
     [SerializeField]
     float NoteSpeed;
 
@@ -56,7 +63,7 @@ public class ChartLoader : MonoBehaviour
     int ChangedMeasure;
 
     /// <summary>
-    /// 拍数
+    /// 拍数(Beat/4)
     /// </summary>
     int Beat;
 
@@ -71,6 +78,9 @@ public class ChartLoader : MonoBehaviour
     [SerializeField]
     bool IsMirror;
 
+    /// <summary>
+    /// 譜面データが見つかったかどうか
+    /// </summary>
     public bool isFindData { get; private set; }
 
     string Path;
@@ -95,18 +105,16 @@ public class ChartLoader : MonoBehaviour
         Path = Application.dataPath + "/StreamingAssets/MusicDatas/Music/" + SettingManager.Instance.FolderName + ".csv";
 
         StartTime = Time.time + SettingManager.Instance.LocalOffset;
-        TotalTime = Offset + Fade.Instance.FadeTime + Fade.Instance.WaitTime;
+        TotalTime = Offset + Fade.Instance.FadeTime + WaitTime;
 
         ChangedMeasure = 1;
 
         LoadChartFile();
     }
 
-    void LoadChartData()
-    {
-
-    }
-
+    /// <summary>
+    /// 譜面データ読み込み
+    /// </summary>
     void LoadChartFile()
     {
         isFindData = false;
@@ -122,6 +130,7 @@ public class ChartLoader : MonoBehaviour
 
         sr.ReadLine();  // 1行目はスキップ(あとでファイル形式チェック処理にする)
 
+        // 譜面生成
         while (sr.Peek() != -1)
         {
             string line = sr.ReadLine();
@@ -158,6 +167,12 @@ public class ChartLoader : MonoBehaviour
         isFindData = true;
     }
 
+    /// <summary>
+    /// 1小節分のノーツを生成
+    /// </summary>
+    /// <param name="measureNum">小節数</param>
+    /// <param name="laneNum">レーン番号</param>
+    /// <param name="body">譜面</param>
     void MakeChart(int measureNum, int laneNum, string body)
     {
         // 文字列を分割して配列にする
@@ -189,6 +204,11 @@ public class ChartLoader : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ノート本体を生成
+    /// </summary>
+    /// <param name="laneNum">レーン番号</param>
+    /// <param name="justTime">判定時間</param>
     void NoteInstantiate(int laneNum, float justTime)
     {
         float posX = 0.0f;
@@ -228,7 +248,6 @@ public class ChartLoader : MonoBehaviour
 
         GameObject nowNote = Instantiate(NoteObject, Vector3.zero, Quaternion.identity, parent);
         HitNote hitNote = nowNote.GetComponent<HitNote>();
-        Settings setting = GetComponent<Settings>();
         hitNote.Initialize(posX, justTime, SettingManager.Instance.NoteSpeed);
     }
 

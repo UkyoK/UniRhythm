@@ -1,8 +1,4 @@
-using Shine.Common;
-using System.Collections;
-using System.Collections.Generic;
 using UniRhythm_acf.Selector;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class LaneInput : MonoBehaviour
@@ -11,13 +7,9 @@ public class LaneInput : MonoBehaviour
 
     private Judgement NowJudgement;
 
-    private string SongName;
-
-
     // Start is called before the first frame update
     void Awake()
     {
-        SongName = SettingManager.Instance.Title;
         NowJudgement = Judgement.Miss;
 
         switch (gameObject.name)
@@ -37,10 +29,9 @@ public class LaneInput : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // -------- 子オブジェクトを2つ取得(A,Bとする)
+        // 子オブジェクトを2つ取得(A,Bとする)
         GameObject childA = null;
         HitNote hitNoteA = null;
         if (transform.childCount > 0)
@@ -60,9 +51,6 @@ public class LaneInput : MonoBehaviour
             childB = transform.GetChild(1).gameObject;
             hitNoteB = childB.GetComponent<HitNote>();
         }
-        // -------- 子オブジェクトを2つ取得(A,Bとする)
-
-        float margin = 0.0f;
 
         // 子Bがnullでなければ、判定ノーツの確定を行う
         if (childB || hitNoteB)
@@ -74,7 +62,6 @@ public class LaneInput : MonoBehaviour
                 ScoreManager.Instance.Miss();
                 Debug.Log("Miss...");
                 Destroy(childA);
-
                 MySoundManager.Instance.PlaySE(Judgement.Miss);
                 ScoreManager.Instance.JudgementDisplay(Judgement.Miss);
 
@@ -85,26 +72,26 @@ public class LaneInput : MonoBehaviour
             // 子Bはもう使わないので破棄
             childB = null;
             hitNoteB = null;
-
         }
+
         // 現在時間と判定時間の誤差を取得
-        margin = Time.time - hitNoteA.JustTime;
+        float margin = Time.time - hitNoteA.JustTime;
 
         // 入力検知
         if (Input.GetKeyDown(_Key) && margin >= (-SettingManager.Instance.MissTime / 1000) && margin <= (SettingManager.Instance.MissTime / 1000))
         {
-            // Perfect判定
             if (margin >= (-SettingManager.Instance.PerfectTime / 1000) && margin <= (SettingManager.Instance.PerfectTime / 1000))
             {
+                // Perfect判定
                 NowJudgement = Judgement.Perfect;
                 ScoreManager.Instance.Perfect();
                 ScoreManager.Instance.AddCombo();
                 Debug.Log("Perfect!!");
                 Destroy(childA);
             }
-            // Great判定
             else if (margin >= -(SettingManager.Instance.GreatTime / 1000) && margin <= (SettingManager.Instance.GreatTime / 1000))
             {
+                // Great判定
                 NowJudgement = Judgement.Great;
 
                 if (margin > 0)
@@ -122,9 +109,9 @@ public class LaneInput : MonoBehaviour
                     Destroy(childA);
                 }
             }
-            // Miss
             else
             {
+                // Miss
                 NowJudgement = Judgement.Miss;
 
                 if (margin > 0)
@@ -147,9 +134,9 @@ public class LaneInput : MonoBehaviour
             // 判定表示
             ScoreManager.Instance.JudgementDisplay(NowJudgement);
         }
-        // 放置検知
         else if (Time.time > hitNoteA.JustTime + SettingManager.Instance.MissTime / 1000)
         {
+            // 放置検知(Miss)
             ScoreManager.Instance.Miss();
             Debug.Log("Miss...");
             Destroy(childA);

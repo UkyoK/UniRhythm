@@ -1,15 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
     private const string _TitleScene = "TestSelectScene";
+    private const string _SongSelectScene = "SongSelectScene";
 
     public void LoadScene(string sceneName)
     {
-        if (SettingManager.Instance.isFindData && sceneName == "SongSelectScene")
+        if (SettingManager.Instance.isFindData && sceneName == _SongSelectScene)
         {
             Fade.Instance.FadeOut(sceneName);
         }

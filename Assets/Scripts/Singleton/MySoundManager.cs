@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using CriWare;
 using UniRhythm_acf.Selector;
-using UnityEngine.UIElements;
 
 public class MySoundManager : MonoBehaviour
 {
@@ -11,15 +8,10 @@ public class MySoundManager : MonoBehaviour
 
     private CriAtomSource atomSrc;
 
-    private bool isMusicPlaying;
     /// <summary>
-    /// ã»ÇÃèIóπ
+    /// ã»Ç™çƒê∂íÜÇ©î€Ç©
     /// </summary>
-    public void MusicPlayStop()
-    {
-        atomSrc.Stop();
-        isMusicPlaying = false;
-    }
+    private bool isMusicPlaying;
 
     private void Awake()
     {
@@ -35,7 +27,6 @@ public class MySoundManager : MonoBehaviour
         isMusicPlaying = false;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         atomSrc = gameObject.GetComponent<CriAtomSource>();
@@ -49,6 +40,7 @@ public class MySoundManager : MonoBehaviour
             return;
         }
 
+        // ã»ÇÃçƒê∂ÇäJén
         atomSrc.cueSheet = SettingManager.Instance.FolderName;
         atomSrc.cueName = SettingManager.Instance.FolderName;
         atomSrc.Play();

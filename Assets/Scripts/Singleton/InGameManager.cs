@@ -1,7 +1,5 @@
 using Cysharp.Threading.Tasks;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,6 +7,9 @@ public class InGameManager : MonoBehaviour
 {
     public static InGameManager Instance;
 
+    /// <summary>
+    /// 楽曲終了時間
+    /// </summary>
     public float EndTime { get; private set; }
     public void SetEndTime(float endTime)
     {
@@ -32,11 +33,10 @@ public class InGameManager : MonoBehaviour
     private async void Start()
     {
         Fade.Instance.FadeIn();
-        await UniTask.Delay(TimeSpan.FromSeconds(Fade.Instance.FadeTime + Fade.Instance.WaitTime));
+        await UniTask.Delay(TimeSpan.FromSeconds(Fade.Instance.FadeTime + ChartLoader.Instance.WaitTime));
         MySoundManager.Instance.PlayMusic();
     }
 
-    // Update is called once per frame
     void Update()
     {
         // 譜面データが見つからなかった場合、曲を止めて選曲画面に戻る
@@ -52,7 +52,7 @@ public class InGameManager : MonoBehaviour
         // 曲が終わったらリザルトシーンに進む
         if (Time.time > EndTime)
         {
-            MySoundManager.Instance.MusicPlayStop();
+            MySoundManager.Instance.StopMusic();
             Fade.Instance.FadeOut("ResultScene");
             Destroy(gameObject);
         }

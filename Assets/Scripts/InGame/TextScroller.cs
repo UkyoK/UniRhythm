@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
@@ -64,15 +62,15 @@ public class TextScroller : MonoBehaviour
         }
 
         // ContentSizeFitterを更新
-        var contentSizeFitter = GetComponent<ContentSizeFitter>();
+        ContentSizeFitter contentSizeFitter = GetComponent<ContentSizeFitter>();
         contentSizeFitter.SetLayoutHorizontal();
         contentSizeFitter.SetLayoutVertical();
         LayoutRebuilder.ForceRebuildLayoutImmediate(contentSizeFitter.GetComponent<RectTransform>());
 
         CanvasGroup = GetComponent<CanvasGroup>();
         TextRectTransform = textComponent.GetComponent<RectTransform>();
-        var textWidth = TextRectTransform.rect.width;
-        var parentWidth = textComponent.transform.parent.GetComponent<RectTransform>().rect.width;
+        float textWidth = TextRectTransform.rect.width;
+        float parentWidth = textComponent.transform.parent.GetComponent<RectTransform>().rect.width;
         StartPosition = TextRectTransform.anchoredPosition;
         FinishLineValue = StartPosition.x - (textWidth + StartPosition.x + ScrollFinishLineAddValue - parentWidth);
         if (textWidth + StartPosition.x > parentWidth)
@@ -89,13 +87,19 @@ public class TextScroller : MonoBehaviour
         while (true)
         {
             await UniTask.Delay(TimeSpan.FromSeconds(WaitTime), cancellationToken: token);
-            await TextRectTransform.DOAnchorPosX(FinishLineValue, ScrollSpeed).SetSpeedBased().SetEase(Ease.Linear).ToUniTask(cancellationToken: token);
 
-            // フェードインフェードアウト
+            // 移動
+            await TextRectTransform.DOAnchorPosX(FinishLineValue, ScrollSpeed).SetSpeedBased().SetEase(Ease.Linear).ToUniTask(cancellationToken: token);
             await UniTask.Delay(TimeSpan.FromSeconds(WaitTime), cancellationToken: token);
+
+            // フェードアウト
             await CanvasGroup.DOFade(0, FadeDuration).SetEase(Ease.Linear);
+
+            // 見えないうちに初期位置へ移動
             TextRectTransform.anchoredPosition = StartPosition;
             await UniTask.Delay(TimeSpan.FromSeconds(WaitTimeFade), cancellationToken: token);
+
+            // フェードイン
             await CanvasGroup.DOFade(1, FadeDuration).SetEase(Ease.Linear).ToUniTask(cancellationToken: token);
         }
     }

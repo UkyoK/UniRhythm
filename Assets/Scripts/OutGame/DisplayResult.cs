@@ -1,33 +1,68 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class DisplayResult : MonoBehaviour
 {
+    /// <summary>
+    /// Perfect表示オブジェクト
+    /// </summary>
     [SerializeField]
     private GameObject PerfectObject;
+    /// <summary>
+    /// Perfect表示TMPro
+    /// </summary>
     private TextMeshProUGUI PerfectDisp;
+
+    /// <summary>
+    /// Great表示オブジェクト
+    /// </summary>
     [SerializeField]
     private GameObject GreatObject;
+    /// <summary>
+    /// Great表示TMPro
+    /// </summary>
     private TextMeshProUGUI GreatDisp;
+
+    /// <summary>
+    /// Miss表示オブジェクト
+    /// </summary>
     [SerializeField]
     private GameObject MissObject;
+    /// <summary>
+    /// Miss表示TMPro
+    /// </summary>
     private TextMeshProUGUI MissDisp;
 
+    /// <summary>
+    /// コンボ表示オブジェクト
+    /// </summary>
     [SerializeField]
     private GameObject ComboObject;
+    /// <summary>
+    /// コンボ表示TMPro
+    /// </summary>
     private TextMeshProUGUI ComboDisp;
 
+    /// <summary>
+    /// スコア表示オブジェクト
+    /// </summary>
     [SerializeField]
     private GameObject ScoreObject;
+    /// <summary>
+    /// スコア表示TMPro
+    /// </summary>
     private TextMeshProUGUI ScoreDisp;
 
+    /// <summary>
+    /// コンボ状態表示オブジェクト
+    /// </summary>
     [SerializeField]
     private GameObject ComboState;
+    /// <summary>
+    /// コンボ状態表示TMPro
+    /// </summary>
     private TextMeshProUGUI ComboStateDisp;
 
-    // Start is called before the first frame update
     void Start()
     {
         PerfectDisp = PerfectObject.GetComponent<TextMeshProUGUI>();

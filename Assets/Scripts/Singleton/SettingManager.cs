@@ -1,8 +1,5 @@
 using Shine.Common;
 using Shine.Json;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -58,6 +55,9 @@ public class SettingManager : MonoBehaviour
     public KeyCode Lane3 { get; private set; }
     public KeyCode Lane4 { get; private set; }
 
+    /// <summary>
+    /// 楽曲データが見つかったかどうか
+    /// </summary>
     public bool isFindData { get; private set; }
     public void ResetIsFindData() { isFindData = false; }
 
@@ -71,13 +71,15 @@ public class SettingManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
 
-        NoteSpeed = 2;
+        // デフォルト設定を突っ込む
+        NoteSpeed = 8;
         PerfectTime = 50;
         GreatTime = 75;
         MissTime = 100;
@@ -95,10 +97,12 @@ public class SettingManager : MonoBehaviour
         isFindData = false;
 
         TopSongID = 0;
-
-        DontDestroyOnLoad(gameObject);
     }
 
+    /// <summary>
+    /// デフォルト設定を適用
+    /// </summary>
+    /// <param name="isMirror">譜面をミラーにするか否か</param>
     public void SetDefaultSetting(bool isMirror = false)
     {
         NoteSpeed = 8;
@@ -114,6 +118,10 @@ public class SettingManager : MonoBehaviour
         Lane4 = KeyCode.K;
     }
 
+    /// <summary>
+    /// 楽曲データの読み込み
+    /// </summary>
+    /// <param name="songName">曲名</param>
     public void LoadChartData(string songName)
     {
         string path = Application.dataPath + "/StreamingAssets/MusicDatas/music_datas.json";
@@ -144,7 +152,6 @@ public class SettingManager : MonoBehaviour
                 isFindData = true;
                 break;
             }
-
         }
 
         if (ArtistName == "None")
@@ -156,6 +163,15 @@ public class SettingManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// 設定を適用
+    /// </summary>
+    /// <param name="noteSpeed">譜面速度</param>
+    /// <param name="perfectTime">Perfect判定時間(ms)</param>
+    /// <param name="greatTime">Great判定時間(ms)</param>
+    /// <param name="missTime">Miss判定時間(ms)</param>
+    /// <param name="isMirror">ミラー設定</param>
+    /// <param name="localOffset">ローカルオフセット</param>
     public void Setting(float noteSpeed, float perfectTime, float greatTime, float missTime, bool isMirror, float localOffset)
     {
         NoteSpeed = noteSpeed;
@@ -166,6 +182,10 @@ public class SettingManager : MonoBehaviour
         LocalOffset = localOffset;
     }
 
+    /// <summary>
+    /// キーコンフィグ
+    /// 左からレーン1,2,3,4
+    /// </summary>
     public void KeyCongig(KeyCode key1, KeyCode key2, KeyCode key3, KeyCode key4)
     {
         Lane1 = key1;

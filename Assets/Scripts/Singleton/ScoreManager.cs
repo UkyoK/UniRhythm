@@ -1,11 +1,7 @@
-using Shine.Common;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UniRhythm_acf.Selector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -28,25 +24,47 @@ public class ScoreManager : MonoBehaviour
     public int MissCount { get; private set; }
     public int AllCombo { get; private set; }
 
+    /// <summary>
+    /// 判定表示キャンバス
+    /// </summary>
     [SerializeField]
     private GameObject JudgeCanvas;
     private Transform Parent;
+
+    /// <summary>
+    /// PerfectのPrefab
+    /// </summary>
     [SerializeField]
     private GameObject PerfectObject;
+    /// <summary>
+    /// GreatのPrefab
+    /// </summary>
     [SerializeField]
     private GameObject GreatObject;
+    /// <summary>
+    /// MissのPrefab
+    /// </summary>
     [SerializeField]
     private GameObject MissObject;
 
+    /// <summary>
+    /// 判定表示が消えるまでの時間
+    /// </summary>
     [SerializeField]
     private float DestroyTime;
 
     private Vector3 ObjectPos;
 
+    /// <summary>
+    /// コンボ表示
+    /// </summary>
     [SerializeField]
     private GameObject ComboObject;
     private TextMeshProUGUI ComboDisp;
 
+    /// <summary>
+    /// スコア表示
+    /// </summary>
     [SerializeField]
     private GameObject ScoreObject;
     private TextMeshProUGUI ScoreDisp;
@@ -56,6 +74,9 @@ public class ScoreManager : MonoBehaviour
     private float NowScore;
     public int DispScore { get; private set; }
 
+    /// <summary>
+    /// 理論値
+    /// </summary>
     [SerializeField]
     private float MaxScore;
 
@@ -64,21 +85,15 @@ public class ScoreManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
-
-        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
-    {
-        ResetScore();
-    }
-
-    public void ResetScore()
     {
         Combo = 0;
         MaxCombo = 0;
@@ -101,34 +116,20 @@ public class ScoreManager : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == _InGameScene)
         {
-            InGameDisplay();
+            Parent = JudgeCanvas.transform;
+            ObjectPos = new Vector3(_ScreenWidth / 2.0f, _ScreenHeight / 2.0f - 30.0f, 0.0f);
+
+            ComboDisp = ComboObject.GetComponent<TextMeshProUGUI>();
+            ComboDisp.text = "0";
+
+            ScoreDisp = ScoreObject.GetComponent<TextMeshProUGUI>();
+            ScoreDisp.text = "0000000";
         }
-        else if (SceneManager.GetActiveScene().name == _ResultScene)
-        {
-            ResultDisplay();
-        }
-    }
-
-    public void InGameDisplay()
-    {
-        Parent = JudgeCanvas.transform;
-        ObjectPos = new Vector3(_ScreenWidth / 2.0f, _ScreenHeight / 2.0f - 30.0f, 0.0f);
-
-        ComboDisp = ComboObject.GetComponent<TextMeshProUGUI>();
-        ComboDisp.text = "0";
-
-        ScoreDisp = ScoreObject.GetComponent<TextMeshProUGUI>();
-        ScoreDisp.text = "0000000";
     }
 
     private void UpdateScoreDisplay()
     {
         ScoreDisp.text = DispScore.ToString("0000000");
-    }
-
-    public void ResultDisplay()
-    {
-        /* ここにリザルトシーンの初期化を記載 */
     }
 
     public void AddCombo()
@@ -208,6 +209,10 @@ public class ScoreManager : MonoBehaviour
         UpdateScoreDisplay();
     }
 
+    /// <summary>
+    /// 判定表示生成
+    /// </summary>
+    /// <param name="judgement"></param>
     public void JudgementDisplay(Judgement judgement)
     {
         GameObject go = MissObject;

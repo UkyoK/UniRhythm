@@ -1,14 +1,10 @@
-using DG.Tweening.Plugins.Core.PathCore;
 using Shine.Common;
 using Shine.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
-using UnityEngine.Profiling;
 
 public class MusicDataCreater : EditorWindow
 {

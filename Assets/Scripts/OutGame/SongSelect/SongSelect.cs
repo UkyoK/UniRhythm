@@ -1,11 +1,7 @@
 using DG.Tweening;
 using Shine.Common;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class SongSelect : MonoBehaviour
 {
@@ -69,6 +65,7 @@ public class SongSelect : MonoBehaviour
 
     void Awake()
     {
+        // パネルの配列にそれぞれのパネルを格納
         PanelList[0] = Panel0;
         PanelList[1] = Panel1;
         PanelList[2] = Panel2;
@@ -77,10 +74,8 @@ public class SongSelect : MonoBehaviour
         PanelList[5] = Panel5;
         PanelList[6] = Panel6;
 
-        TopSong = SongInfoLoader.Instance.SongInfoList.Count - 1 + SettingManager.Instance.TopSongID;
-
+        // 表示する分の曲データを取得、表示
         int songID = SettingManager.Instance.TopSongID;
-
         for (int i = 0; i < _ArraySize; ++i, ++songID)
         {
             if (songID >= SongInfoLoader.Instance.SongInfoList.Count)
@@ -118,15 +113,19 @@ public class SongSelect : MonoBehaviour
     void Start()
     {
         Fade.Instance.FadeIn();
+
+        // 先頭の曲番号を取得
         TopSong = SettingManager.Instance.TopSongID - 1;
         if (TopSong < 0)
         {
+            // 0未満だったらリストの最後の曲番号に補正
             TopSong = SongInfoLoader.Instance.SongInfoList.Count - 1;
         }
     }
 
     void Update()
     {
+        // 下の曲に移動
         if (Input.GetKey(KeyCode.DownArrow) && isScroll)
         {
             ++TopSong;
@@ -138,6 +137,8 @@ public class SongSelect : MonoBehaviour
             UpdateSongList();
             SelectAnimationUp();
         }
+
+        // 上の曲に移動
         if (Input.GetKey(KeyCode.UpArrow) && isScroll)
         {
             --TopSong;
@@ -149,6 +150,8 @@ public class SongSelect : MonoBehaviour
             UpdateSongList();
             SelectAnimationDown();
         }
+
+        // この曲で遊ぶドン
         if (Input.GetKeyDown(KeyCode.Return) && isScroll)
         {
             SettingManager.Instance.SetDefaultSetting();
@@ -159,6 +162,9 @@ public class SongSelect : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// 表示曲一覧を更新
+    /// </summary>
     void UpdateSongList()
     {
         int songID = TopSong + 1;
@@ -181,6 +187,9 @@ public class SongSelect : MonoBehaviour
         isScroll = false;
     }
 
+    /// <summary>
+    /// 曲一覧を1つ上に移動
+    /// </summary>
     async void SelectAnimationUp()
     {
         await DOTween.Sequence()
@@ -195,6 +204,9 @@ public class SongSelect : MonoBehaviour
         isScroll = true;
     }
 
+    /// <summary>
+    /// 曲一覧を1つ下に移動
+    /// </summary>
     async void SelectAnimationDown()
     {
         await DOTween.Sequence()
