@@ -77,23 +77,24 @@ public class SongSelect : MonoBehaviour
         PanelList[5] = Panel5;
         PanelList[6] = Panel6;
 
-        TopSong = SongInfoLoader.Instance.SongInfoList.Count - 1;
+        TopSong = SongInfoLoader.Instance.SongInfoList.Count - 1 + SettingManager.Instance.TopSongID;
 
-        int songID = 0;
+        int songID = SettingManager.Instance.TopSongID;
 
         for (int i = 0; i < _ArraySize; ++i, ++songID)
         {
+            if (songID >= SongInfoLoader.Instance.SongInfoList.Count)
+            {
+                songID = 0;
+            }
+
             if (i == 0)
             {
                 // 一番上のパネルには、リストの最後の要素を入れる
-                DisplaySongInfo[i] = SongInfoLoader.Instance.SongInfoList[SongInfoLoader.Instance.SongInfoList.Count - 1];
+                DisplaySongInfo[i] = SongInfoLoader.Instance.SongInfoList[songID];
             }
             else
             {
-                if (songID >= SongInfoLoader.Instance.SongInfoList.Count)
-                {
-                    songID = 0;
-                }
                 // 残りは先頭から順に入れる
                 DisplaySongInfo[i] = SongInfoLoader.Instance.SongInfoList[songID];
             }
@@ -117,6 +118,11 @@ public class SongSelect : MonoBehaviour
     void Start()
     {
         Fade.Instance.FadeIn();
+        TopSong = SettingManager.Instance.TopSongID - 1;
+        if (TopSong < 0)
+        {
+            TopSong = SongInfoLoader.Instance.SongInfoList.Count - 1;
+        }
     }
 
     void Update()
@@ -147,6 +153,7 @@ public class SongSelect : MonoBehaviour
         {
             SettingManager.Instance.SetDefaultSetting();
             SettingManager.Instance.LoadChartData(DisplaySongInfo[_CenterSongID].Title);
+            SettingManager.Instance.TopSongID = TopSong + 1;
             Fade.Instance.FadeOut("InGameScene");
         }
 
@@ -155,6 +162,7 @@ public class SongSelect : MonoBehaviour
     void UpdateSongList()
     {
         int songID = TopSong + 1;
+        SettingManager.Instance.TopSongID = TopSong;
 
         for (int i = 0; i < _ArraySize; ++i, ++songID)
         {

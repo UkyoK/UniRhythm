@@ -29,21 +29,6 @@ public class ChartLoader : MonoBehaviour
     [SerializeField]
     float NoteSpeed;
 
-    List<ChartType> ChartTypeList = new List<ChartType>();
-    List<NoteType> NoteTypeList = new List<NoteType>();
-
-    string ChartDataPath;
-
-    /// <summary>
-    /// ã»ñº
-    /// </summary>
-    string Title;
-
-    /// <summary>
-    /// äyã»êªçÏé“
-    /// </summary>
-    string Artist;
-
     /// <summary>
     /// ã»ÇÃÉeÉìÉ|
     /// </summary>
@@ -105,8 +90,6 @@ public class ChartLoader : MonoBehaviour
         AllNotesValue = 0;
         Beat = 4;
 
-        Title = SettingManager.Instance.Title;
-        Artist = SettingManager.Instance.ArtistName;
         BPM = SettingManager.Instance.StartBPM;
         Offset = SettingManager.Instance.Offset;
         Path = Application.dataPath + "/StreamingAssets/MusicDatas/Music/" + SettingManager.Instance.FolderName + ".csv";

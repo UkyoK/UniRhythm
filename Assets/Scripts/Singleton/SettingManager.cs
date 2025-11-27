@@ -1,4 +1,5 @@
 using Shine.Common;
+using Shine.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -60,6 +61,11 @@ public class SettingManager : MonoBehaviour
     public bool isFindData { get; private set; }
     public void ResetIsFindData() { isFindData = false; }
 
+    /// <summary>
+    /// 選曲画面で先頭になる曲のID
+    /// </summary>
+    public int TopSongID { get; set; }
+
     private void Awake()
     {
         if (Instance == null)
@@ -88,6 +94,8 @@ public class SettingManager : MonoBehaviour
 
         isFindData = false;
 
+        TopSongID = 0;
+
         DontDestroyOnLoad(gameObject);
     }
 
@@ -108,7 +116,7 @@ public class SettingManager : MonoBehaviour
 
     public void LoadChartData(string songName)
     {
-        string path = Application.dataPath + "/StreamingAssets/MusicDatas/music_datas.csv";
+        string path = Application.dataPath + "/StreamingAssets/MusicDatas/music_datas.json";
 
         if (!File.Exists(path))
         {
@@ -117,29 +125,26 @@ public class SettingManager : MonoBehaviour
             return;
         }
 
-        FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
-        StreamReader sr = new StreamReader(fs);
+        string json = File.ReadAllText(path);
+        Data data = JsonUtility.FromJson<Data>(json);
 
-        sr.ReadLine();  // 1行目はスキップ(あとでファイル形式チェック処理にする)
-
-        while (sr.Peek() != -1)
+        // ゲーム内で使えるデータに変換
+        foreach (MusicData musicData in data.MusicDatas)
         {
-            string line = sr.ReadLine();
-            string[] split = line.Split(',');
-
             // まずタイトルだけ取得
-            Title = split[(int)MusicInfo.Title];
+            Title = musicData.Title;
 
             // タイトルが設定されていた曲名と一致していれば処理
-            if(Title == songName)
+            if (Title == songName)
             {
-                ArtistName = split[(int)MusicInfo.Artist];
-                StartBPM = float.Parse(split[(int)MusicInfo.StartBPM]);
-                Offset = float.Parse(split[(int)MusicInfo.Offset]);
-                FolderName = split[(int)MusicInfo.FolderName];
+                ArtistName = musicData.Artist;
+                StartBPM = float.Parse(musicData.StartBPM);
+                Offset = float.Parse(musicData.Offset);
+                FolderName = musicData.FolderName;
                 isFindData = true;
                 break;
             }
+
         }
 
         if (ArtistName == "None")

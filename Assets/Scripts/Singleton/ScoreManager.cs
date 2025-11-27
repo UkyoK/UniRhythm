@@ -26,6 +26,7 @@ public class ScoreManager : MonoBehaviour
     public int FastMissCount { get; private set; }
     public int LateMissCount { get; private set; }
     public int MissCount { get; private set; }
+    public int AllCombo { get; private set; }
 
     [SerializeField]
     private GameObject JudgeCanvas;
@@ -88,6 +89,8 @@ public class ScoreManager : MonoBehaviour
         FastMissCount = 0;
         LateMissCount = 0;
         MissCount = 0;
+
+        AllCombo = ChartLoader.Instance.AllNotesValue;
 
         PerfectScore = MaxScore / ChartLoader.Instance.AllNotesValue;
         GreatScore = PerfectScore / 2;

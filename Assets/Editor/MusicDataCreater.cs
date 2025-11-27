@@ -12,10 +12,20 @@ using UnityEngine.Profiling;
 
 public class MusicDataCreater : EditorWindow
 {
+    /// <summary>
+    /// 表示用MusicData変数
+    /// </summary>
     [SerializeField]
     List<MusicData> MusicDatas;
 
+    /// <summary>
+    /// リスト用スクロール値
+    /// </summary>
     private Vector2 ListScrollPos = Vector2.zero;
+
+    /// <summary>
+    /// プレビュー用スクロール値
+    /// </summary>
     private Vector2 PreviewScrollPos = Vector2.zero;
 
     const string _path = "/StreamingAssets/MusicDatas";
@@ -91,6 +101,7 @@ public class MusicDataCreater : EditorWindow
 
         outputText = JsonUtility.ToJson(data, true);
     }
+
     void LoadJson()
     {
         if (!File.Exists(InputPath))
@@ -101,6 +112,7 @@ public class MusicDataCreater : EditorWindow
 
         json = File.ReadAllText(InputPath);
         data = JsonUtility.FromJson<Data>(json);
+        MusicDatas = new List<MusicData>(data.MusicDatas);
     }
 
     void LoadCSV()

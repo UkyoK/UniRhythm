@@ -23,6 +23,10 @@ public class DisplayResult : MonoBehaviour
     private GameObject ScoreObject;
     private TextMeshProUGUI ScoreDisp;
 
+    [SerializeField]
+    private GameObject ComboState;
+    private TextMeshProUGUI ComboStateDisp;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,8 +45,27 @@ public class DisplayResult : MonoBehaviour
         ScoreDisp = ScoreObject.GetComponent<TextMeshProUGUI>();
         ScoreDisp.text = ScoreManager.Instance.DispScore.ToString();
 
-        Fade.Instance.FadeIn();
+        ComboStateDisp = ComboState.GetComponent<TextMeshProUGUI>();
+        if (ScoreManager.Instance.PerfectCount == ScoreManager.Instance.AllCombo)
+        {
+            ComboStateDisp.fontStyle = FontStyles.Bold | FontStyles.Italic;
+            ComboStateDisp.color = new Color(1.0f, 0.0f, 1.0f, 1.0f);
+            ComboStateDisp.text = "All Perfect!!";
+        }
+        else if (ScoreManager.Instance.MaxCombo == ScoreManager.Instance.AllCombo)
+        {
+            ComboStateDisp.fontStyle = FontStyles.Bold;
+            ComboStateDisp.color = new Color(1.0f, 0.5f, 0.0f, 1.0f);
+            ComboStateDisp.text = "Full Combo!";
+        }
+        else
+        {
+            ComboStateDisp.fontStyle = FontStyles.Normal;
+            ComboStateDisp.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            ComboStateDisp.text = "Max Combo";
+        }
 
+        Fade.Instance.FadeIn();
     }
 
 }
