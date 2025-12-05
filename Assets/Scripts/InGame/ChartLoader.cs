@@ -83,6 +83,7 @@ public class ChartLoader : MonoBehaviour
     /// </summary>
     public bool isFindData { get; private set; }
 
+    string FileName;
     string Path;
 
     void Awake()
@@ -102,7 +103,8 @@ public class ChartLoader : MonoBehaviour
 
         BPM = SettingManager.Instance.StartBPM;
         Offset = SettingManager.Instance.Offset;
-        Path = Application.dataPath + "/StreamingAssets/MusicDatas/Music/" + SettingManager.Instance.FolderName + ".csv";
+        FileName = SettingManager.Instance.FolderName + "_" + SettingManager.Instance.ChartDifficulty.ToString();
+        Path = Application.dataPath + "/StreamingAssets/MusicDatas/Music/" + SettingManager.Instance.FolderName + "/" + FileName + ".csv";
 
         StartTime = Time.time + SettingManager.Instance.LocalOffset;
         TotalTime = Offset + Fade.Instance.FadeTime + WaitTime;
@@ -128,7 +130,19 @@ public class ChartLoader : MonoBehaviour
         FileStream fs = new FileStream(Path, FileMode.Open, FileAccess.Read);
         StreamReader sr = new StreamReader(fs);
 
-        sr.ReadLine();  // 1行目はスキップ(あとでファイル形式チェック処理にする)
+        // データ形式チェック
+        string checkLine = sr.ReadLine();
+        string[] checkSprit = checkLine.Split(',');
+        for (int i = 0; i < (int)ChartType.MAX; ++i)
+        {
+            ChartType info = (ChartType)Enum.ToObject(typeof(ChartType), i);
+
+            if (checkSprit[i] != info.ToString())
+            {
+                Debug.LogError("譜面データの形式が間違っています");
+                return;
+            }
+        }
 
         // 譜面生成
         while (sr.Peek() != -1)

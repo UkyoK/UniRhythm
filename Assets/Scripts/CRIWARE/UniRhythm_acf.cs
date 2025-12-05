@@ -66,5 +66,14 @@ namespace UniRhythm_acf {
 			///<summary></summary>
 			Miss,
 		}
+		///<summary></summary>
+		public enum ClearState {
+			///<summary></summary>
+			Clear,
+			///<summary></summary>
+			FullCombo,
+			///<summary></summary>
+			AllPerfect,
+		}
 	}
 }

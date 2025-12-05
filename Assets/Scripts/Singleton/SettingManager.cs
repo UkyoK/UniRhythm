@@ -46,7 +46,7 @@ public class SettingManager : MonoBehaviour
 
     public string FolderName { get; private set; }
 
-    public Difficulty ChartDifficulty { get; private set; }
+    public Difficulty ChartDifficulty { get; set; }
 
     public int ChartLevel { get; private set; }
 
@@ -86,8 +86,8 @@ public class SettingManager : MonoBehaviour
         IsMirror = false;
         LocalOffset = 0.0f;
 
-        Title = "None";
-        ArtistName = "None";
+        Title = "";
+        ArtistName = "";
         StartBPM = 0;
         Offset = 0.0f;
         FolderName = "test_music";
@@ -97,6 +97,9 @@ public class SettingManager : MonoBehaviour
         isFindData = false;
 
         TopSongID = 0;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     /// <summary>
@@ -105,7 +108,7 @@ public class SettingManager : MonoBehaviour
     /// <param name="isMirror">譜面をミラーにするか否か</param>
     public void SetDefaultSetting(bool isMirror = false)
     {
-        NoteSpeed = 8;
+        NoteSpeed = 10;
         PerfectTime = 50;
         GreatTime = 75;
         MissTime = 100;
@@ -154,7 +157,7 @@ public class SettingManager : MonoBehaviour
             }
         }
 
-        if (ArtistName == "None")
+        if (ArtistName == "")
         {
             isFindData = false;
             Debug.LogError("楽曲データが見つかりませんでした");

@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class SongSelect : MonoBehaviour
 {
+    public static SongSelect Instance;
+
     [SerializeField] GameObject Panel0;
     [SerializeField] GameObject Panel1;
     [SerializeField] GameObject Panel2;
@@ -14,12 +16,15 @@ public class SongSelect : MonoBehaviour
     [SerializeField] GameObject Panel6;
 
     private const int _ArraySize = 7;
-    private const int _CenterSongID = 3;
+    public int _CenterSongID = 3;
+
+    public SelectState SongSelectState;
 
     /// <summary>
     /// 表示する曲データ配列
     /// </summary>
     SongInfo[] DisplaySongInfo = new SongInfo[_ArraySize];
+    public SongInfo CenterSongInfo = new SongInfo();
 
     /// <summary>
     /// 表示用パネルオブジェクト
@@ -56,7 +61,7 @@ public class SongSelect : MonoBehaviour
     /// <summary>
     /// パネル0に表示される曲のID
     /// </summary>
-    private int TopSong;
+    public int TopSong;
 
     /// <summary>
     /// スクロール処理を行うかどうか
@@ -65,6 +70,15 @@ public class SongSelect : MonoBehaviour
 
     void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         // パネルの配列にそれぞれのパネルを格納
         PanelList[0] = Panel0;
         PanelList[1] = Panel1;
@@ -103,10 +117,13 @@ public class SongSelect : MonoBehaviour
             TitleList[i].text = DisplaySongInfo[i].Title;
             ArtistList[i].text = DisplaySongInfo[i].Artist;
             StartBPMList[i].text = DisplaySongInfo[i].StartBPM.ToString();
+
+            CenterSongInfo = DisplaySongInfo[_CenterSongID];
         }
 
         Debug.Log("表示用データ読み込み完了");
 
+        SongSelectState = SelectState.SongSelect;
         isScroll = true;
     }
 
@@ -121,10 +138,18 @@ public class SongSelect : MonoBehaviour
             // 0未満だったらリストの最後の曲番号に補正
             TopSong = SongInfoLoader.Instance.SongInfoList.Count - 1;
         }
+
+        MySoundManager.Instance.PlaySongSelectVoice(SongSelectState);
     }
 
-    void Update()
+    async void Update()
     {
+        if (SongSelectState != SelectState.SongSelect)
+        {
+            // 楽曲選択状態でないなら、処理をしない
+            return;
+        }
+
         // 下の曲に移動
         if (Input.GetKey(KeyCode.DownArrow) && isScroll)
         {
@@ -151,13 +176,12 @@ public class SongSelect : MonoBehaviour
             SelectAnimationDown();
         }
 
-        // この曲で遊ぶドン
+        // 難易度を選ぶ
         if (Input.GetKeyDown(KeyCode.Return) && isScroll)
         {
-            SettingManager.Instance.SetDefaultSetting();
-            SettingManager.Instance.LoadChartData(DisplaySongInfo[_CenterSongID].Title);
-            SettingManager.Instance.TopSongID = TopSong + 1;
-            Fade.Instance.FadeOut("InGameScene");
+            SongSelectState = SelectState.LevelSelect;
+            MySoundManager.Instance.PlaySongSelectVoice(SongSelectState);
+            await LevelSelect.Instance.LevelSelectStep();
         }
 
     }
@@ -184,6 +208,7 @@ public class SongSelect : MonoBehaviour
             StartBPMList[i].text = DisplaySongInfo[i].StartBPM.ToString();
         }
 
+        CenterSongInfo = DisplaySongInfo[_CenterSongID];
         isScroll = false;
     }
 

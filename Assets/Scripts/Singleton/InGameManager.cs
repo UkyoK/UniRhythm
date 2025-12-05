@@ -35,10 +35,7 @@ public class InGameManager : MonoBehaviour
         Fade.Instance.FadeIn();
         await UniTask.Delay(TimeSpan.FromSeconds(Fade.Instance.FadeTime + ChartLoader.Instance.WaitTime));
         MySoundManager.Instance.PlayMusic();
-    }
 
-    void Update()
-    {
         // 譜面データが見つからなかった場合、曲を止めて選曲画面に戻る
         if (!ChartLoader.Instance.isFindData)
         {
@@ -48,6 +45,10 @@ public class InGameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+    }
+
+    void Update()
+    {
 
         // 曲が終わったらリザルトシーンに進む
         if (Time.time > EndTime)

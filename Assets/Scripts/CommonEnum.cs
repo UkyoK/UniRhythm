@@ -3,6 +3,17 @@ using System;
 namespace Shine.Common
 {
     /// <summary>
+    /// 選曲画面の状態
+    /// </summary>
+    public enum SelectState
+    {
+        SongSelect,
+        LevelSelect,
+        Option,
+        MusicStart,
+    }
+
+    /// <summary>
     /// ノート構造体
     /// </summary>
     public struct Note
@@ -70,6 +81,7 @@ namespace Shine.Common
         Measure,
         Lane,
         Body,
+        MAX
     }
 
     /// <summary>

@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using System;
 using TMPro;
 using UniRhythm_acf.Selector;
 using UnityEngine;
@@ -63,6 +65,13 @@ public class ScoreManager : MonoBehaviour
     private TextMeshProUGUI ComboDisp;
 
     /// <summary>
+    /// コンボエフェクト
+    /// </summary>
+    [SerializeField]
+    private GameObject ComboEffect;
+    private ParticleSystem ComboParticle;
+
+    /// <summary>
     /// スコア表示
     /// </summary>
     [SerializeField]
@@ -73,6 +82,8 @@ public class ScoreManager : MonoBehaviour
     private float GreatScore;
     private float NowScore;
     public int DispScore { get; private set; }
+
+    private bool IsAllPerfect = false;
 
     /// <summary>
     /// 理論値
@@ -91,6 +102,10 @@ public class ScoreManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        ComboParticle = ComboEffect.GetComponent<ParticleSystem>();
+        ComboEffect.SetActive(false);
+        IsAllPerfect = false;
     }
 
     private void Start()
@@ -132,13 +147,26 @@ public class ScoreManager : MonoBehaviour
         ScoreDisp.text = DispScore.ToString("0000000");
     }
 
-    public void AddCombo()
+    public async void AddCombo()
     {
         ++Combo;
         ComboDisp.text = Combo.ToString();
         if(Combo >= MaxCombo)
         {
             MaxCombo = Combo;
+        }
+
+        if (Combo == ChartLoader.Instance.AllNotesValue && !IsAllPerfect)
+        {
+            MySoundManager.Instance.PlayClearVoice(ClearState.FullCombo);
+        }
+
+        if (Combo % 50 == 0 && Combo != 0)
+        {
+            ComboEffect.SetActive(true);
+            ComboParticle.Play();
+            await UniTask.Delay(TimeSpan.FromSeconds(2.0f));
+            ComboEffect.SetActive(false);
         }
     }
 
@@ -207,6 +235,12 @@ public class ScoreManager : MonoBehaviour
         }
 
         UpdateScoreDisplay();
+
+        if (PerfectCount == ChartLoader.Instance.AllNotesValue)
+        {
+            IsAllPerfect = true;
+            MySoundManager.Instance.PlayClearVoice(ClearState.AllPerfect);
+        }
     }
 
     /// <summary>

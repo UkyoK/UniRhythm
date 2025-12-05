@@ -1,13 +1,18 @@
 using UniRhythm_acf.Selector;
+using Unity.VisualScripting;
 using UnityEngine;
+using static CriWare.CriAtomExMic;
 
 public class LaneInput : MonoBehaviour
 {
     KeyCode _Key;
 
+    [SerializeField]
+    private GameObject EffecterObject;
+    private NoteEffect Effecter;
+
     private Judgement NowJudgement;
 
-    // Start is called before the first frame update
     void Awake()
     {
         NowJudgement = Judgement.Miss;
@@ -27,6 +32,8 @@ public class LaneInput : MonoBehaviour
                 _Key = SettingManager.Instance.Lane4;
                 break;
         }
+
+        Effecter = EffecterObject.GetComponent<NoteEffect>();
     }
 
     void Update()
@@ -77,22 +84,24 @@ public class LaneInput : MonoBehaviour
         // Œ»ÝŽžŠÔ‚Æ”»’èŽžŠÔ‚ÌŒë·‚ðŽæ“¾
         float margin = Time.time - hitNoteA.JustTime;
 
-        // “ü—ÍŒŸ’m
-        if (Input.GetKeyDown(_Key) && margin >= (-SettingManager.Instance.MissTime / 1000) && margin <= (SettingManager.Instance.MissTime / 1000))
+        // “ü—ÍŒŸ’m && ‹ó‘Å‚¿ŒŸ’m
+        if (Input.GetKeyDown(_Key) && Mathf.Abs(margin) <= SettingManager.Instance.MissTime / 1000)
         {
-            if (margin >= (-SettingManager.Instance.PerfectTime / 1000) && margin <= (SettingManager.Instance.PerfectTime / 1000))
+            if (Mathf.Abs(margin) <= SettingManager.Instance.PerfectTime / 1000)
             {
                 // Perfect”»’è
                 NowJudgement = Judgement.Perfect;
+                Effecter.PerfectEffect();
                 ScoreManager.Instance.Perfect();
                 ScoreManager.Instance.AddCombo();
                 Debug.Log("Perfect!!");
                 Destroy(childA);
             }
-            else if (margin >= -(SettingManager.Instance.GreatTime / 1000) && margin <= (SettingManager.Instance.GreatTime / 1000))
+            else if (Mathf.Abs(margin) <= SettingManager.Instance.GreatTime / 1000)
             {
                 // Great”»’è
                 NowJudgement = Judgement.Great;
+                Effecter.GreatEffect();
 
                 if (margin > 0)
                 {

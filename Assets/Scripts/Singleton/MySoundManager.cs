@@ -1,6 +1,7 @@
 using UnityEngine;
 using CriWare;
 using UniRhythm_acf.Selector;
+using Shine.Common;
 
 public class MySoundManager : MonoBehaviour
 {
@@ -69,6 +70,30 @@ public class MySoundManager : MonoBehaviour
     public void PlaySE(Judgement nowJudgement)
     {
         atomSrc.player.SetSelectorLabel("Judgement", nowJudgement.ToString());
+        atomSrc.Play();
+    }
+
+    public void PlayClearVoice(ClearState clearState)
+    {
+        atomSrc.cueSheet = "MusicEnd";
+        atomSrc.cueName = "MusicEnd";
+
+        atomSrc.player.SetSelectorLabel("ClearState", clearState.ToString());
+        atomSrc.Play();
+    }
+
+    public void PlaySongSelectVoice(SelectState selectState)
+    {
+        atomSrc.cueSheet = selectState.ToString();
+        if (selectState == SelectState.MusicStart)
+        {
+            atomSrc.cueName = selectState.ToString();
+        }
+        else
+        {
+            atomSrc.cueName = "Moca_voice_" + selectState.ToString();
+        }
+
         atomSrc.Play();
     }
 }
