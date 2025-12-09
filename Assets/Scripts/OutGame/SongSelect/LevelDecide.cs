@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Shine.Common;
 using TMPro;
-using Cysharp.Threading.Tasks;
 
 public class LevelDecide : MonoBehaviour
 {

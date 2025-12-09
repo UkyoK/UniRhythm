@@ -1,9 +1,11 @@
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using System;
 using TMPro;
 using UniRhythm_acf.Selector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using R3;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -55,21 +57,12 @@ public class ScoreManager : MonoBehaviour
     [SerializeField]
     private float DestroyTime;
 
-    private Vector3 ObjectPos;
-
     /// <summary>
     /// コンボ表示
     /// </summary>
     [SerializeField]
     private GameObject ComboObject;
-    private TextMeshProUGUI ComboDisp;
-
-    /// <summary>
-    /// コンボエフェクト
-    /// </summary>
-    [SerializeField]
-    private GameObject ComboEffect;
-    private ParticleSystem ComboParticle;
+    private ComboDisplayer ComboDisp;
 
     /// <summary>
     /// スコア表示
@@ -83,7 +76,7 @@ public class ScoreManager : MonoBehaviour
     private float NowScore;
     public int DispScore { get; private set; }
 
-    private bool IsAllPerfect = false;
+    public bool IsAllPerfect = false;
 
     /// <summary>
     /// 理論値
@@ -103,8 +96,6 @@ public class ScoreManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        ComboParticle = ComboEffect.GetComponent<ParticleSystem>();
-        ComboEffect.SetActive(false);
         IsAllPerfect = false;
     }
 
@@ -129,13 +120,11 @@ public class ScoreManager : MonoBehaviour
 
         float totalscore = PerfectScore * ChartLoader.Instance.AllNotesValue;
 
+        ComboDisp = ComboObject.gameObject.GetComponent<ComboDisplayer>();
+
         if (SceneManager.GetActiveScene().name == _InGameScene)
         {
             Parent = JudgeCanvas.transform;
-            ObjectPos = new Vector3(_ScreenWidth / 2.0f, _ScreenHeight / 2.0f - 30.0f, 0.0f);
-
-            ComboDisp = ComboObject.GetComponent<TextMeshProUGUI>();
-            ComboDisp.text = "0";
 
             ScoreDisp = ScoreObject.GetComponent<TextMeshProUGUI>();
             ScoreDisp.text = "0000000";
@@ -147,37 +136,14 @@ public class ScoreManager : MonoBehaviour
         ScoreDisp.text = DispScore.ToString("0000000");
     }
 
-    public async void AddCombo()
-    {
-        ++Combo;
-        ComboDisp.text = Combo.ToString();
-        if(Combo >= MaxCombo)
-        {
-            MaxCombo = Combo;
-        }
-
-        if (Combo == ChartLoader.Instance.AllNotesValue && !IsAllPerfect)
-        {
-            MySoundManager.Instance.PlayClearVoice(ClearState.FullCombo);
-        }
-
-        if (Combo % 50 == 0 && Combo != 0)
-        {
-            ComboEffect.SetActive(true);
-            ComboParticle.Play();
-            await UniTask.Delay(TimeSpan.FromSeconds(2.0f));
-            ComboEffect.SetActive(false);
-        }
-    }
-
     /// <summary>
     /// ミス(入力時)
     /// </summary>
     /// <param name="margin"></param>
     public void Miss(float margin)
     {
-        Combo = 0;
-        ComboDisp.text = Combo.ToString();
+        ComboDisp.Miss();
+
         ++MissCount;
 
         if (margin < 0)
@@ -196,12 +162,14 @@ public class ScoreManager : MonoBehaviour
     public void Miss()
     {
         Combo = 0;
-        ComboDisp.text = Combo.ToString();
+        ComboDisp.Miss();
         ++MissCount;
     }
 
     public void Great(float margin)
     {
+        ComboDisp.AddCombo();
+
         ++GreatCount;
         NowScore += GreatScore;
         DispScore = (int)NowScore;
@@ -219,6 +187,8 @@ public class ScoreManager : MonoBehaviour
     }
     public void Perfect()
     {
+        ComboDisp.AddCombo();
+
         ++PerfectCount;
         NowScore += PerfectScore;
         DispScore = (int)NowScore;
@@ -247,7 +217,7 @@ public class ScoreManager : MonoBehaviour
     /// 判定表示生成
     /// </summary>
     /// <param name="judgement"></param>
-    public void JudgementDisplay(Judgement judgement)
+    public void JudgementDisplay(Judgement judgement, Vector3 lanePos)
     {
         GameObject go = MissObject;
         switch(judgement)
@@ -265,7 +235,7 @@ public class ScoreManager : MonoBehaviour
                 break;
         }
 
-        GameObject Instant = Instantiate(go, ObjectPos, Quaternion.identity, Parent);
+        GameObject Instant = Instantiate(go, lanePos, Quaternion.identity, Parent);
         Destroy(Instant, DestroyTime);
     }
 

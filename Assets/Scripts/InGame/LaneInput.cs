@@ -11,6 +11,10 @@ public class LaneInput : MonoBehaviour
     private GameObject EffecterObject;
     private NoteEffect Effecter;
 
+    [SerializeField]
+    private GameObject JudgeDispObject;
+    private Vector3 JudgeDispPos;
+
     private Judgement NowJudgement;
 
     void Awake()
@@ -34,6 +38,7 @@ public class LaneInput : MonoBehaviour
         }
 
         Effecter = EffecterObject.GetComponent<NoteEffect>();
+        JudgeDispPos = JudgeDispObject.transform.position;
     }
 
     void Update()
@@ -70,7 +75,7 @@ public class LaneInput : MonoBehaviour
                 Debug.Log("Miss...");
                 Destroy(childA);
                 MySoundManager.Instance.PlaySE(Judgement.Miss);
-                ScoreManager.Instance.JudgementDisplay(Judgement.Miss);
+                ScoreManager.Instance.JudgementDisplay(Judgement.Miss, JudgeDispPos);
 
                 // ”»’èƒm[ƒc‚ðB‚ÉØ‚è‘Ö‚¦
                 childA = childB;
@@ -93,7 +98,6 @@ public class LaneInput : MonoBehaviour
                 NowJudgement = Judgement.Perfect;
                 Effecter.PerfectEffect();
                 ScoreManager.Instance.Perfect();
-                ScoreManager.Instance.AddCombo();
                 Debug.Log("Perfect!!");
                 Destroy(childA);
             }
@@ -106,14 +110,12 @@ public class LaneInput : MonoBehaviour
                 if (margin > 0)
                 {
                     ScoreManager.Instance.Great(margin);
-                    ScoreManager.Instance.AddCombo();
                     Debug.Log("Great (LATE)");
                     Destroy(childA);
                 }
                 else
                 {
                     ScoreManager.Instance.Great(margin);
-                    ScoreManager.Instance.AddCombo();
                     Debug.Log("Great (FAST)");
                     Destroy(childA);
                 }
@@ -141,7 +143,7 @@ public class LaneInput : MonoBehaviour
             MySoundManager.Instance.PlaySE(NowJudgement);
 
             // ”»’è•\Ž¦
-            ScoreManager.Instance.JudgementDisplay(NowJudgement);
+            ScoreManager.Instance.JudgementDisplay(NowJudgement, JudgeDispPos);
         }
         else if (Time.time > hitNoteA.JustTime + SettingManager.Instance.MissTime / 1000)
         {
@@ -151,7 +153,7 @@ public class LaneInput : MonoBehaviour
             Destroy(childA);
 
             MySoundManager.Instance.PlaySE(Judgement.Miss);
-            ScoreManager.Instance.JudgementDisplay(Judgement.Miss);
+            ScoreManager.Instance.JudgementDisplay(Judgement.Miss, JudgeDispPos);
         }
 
     }
