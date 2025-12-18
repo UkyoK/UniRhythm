@@ -12,10 +12,6 @@ public class ScoreManager : MonoBehaviour
     public static ScoreManager Instance;
 
     private const string _InGameScene = "InGameScene";
-    private const string _ResultScene = "ResultScene";
-
-    private const float _ScreenWidth = 1280.0f;
-    private const float _ScreenHeight = 720.0f;
 
     public int Combo { get; private set; }
     public int MaxCombo { get; private set; }
@@ -168,8 +164,6 @@ public class ScoreManager : MonoBehaviour
 
     public void Great(float margin)
     {
-        ComboDisp.AddCombo();
-
         ++GreatCount;
         NowScore += GreatScore;
         DispScore = (int)NowScore;
@@ -183,12 +177,11 @@ public class ScoreManager : MonoBehaviour
             ++FastGreatCount;
         }
 
+        ComboDisp.AddCombo();
         UpdateScoreDisplay();
     }
     public void Perfect()
     {
-        ComboDisp.AddCombo();
-
         ++PerfectCount;
         NowScore += PerfectScore;
         DispScore = (int)NowScore;
@@ -204,13 +197,14 @@ public class ScoreManager : MonoBehaviour
             DispScore = (int)MaxScore;
         }
 
-        UpdateScoreDisplay();
-
         if (PerfectCount == ChartLoader.Instance.AllNotesValue)
         {
             IsAllPerfect = true;
             MySoundManager.Instance.PlayClearVoice(ClearState.AllPerfect);
         }
+
+        ComboDisp.AddCombo();
+        UpdateScoreDisplay();
     }
 
     /// <summary>

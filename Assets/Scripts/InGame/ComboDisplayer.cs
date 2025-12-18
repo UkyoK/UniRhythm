@@ -1,10 +1,6 @@
-using CriWare;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using R3;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UniRhythm_acf.Selector;
 using UnityEngine;
@@ -56,13 +52,10 @@ public class ComboDisplayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ComboEffect.SetActive(true);
-
         _currentCombo.Subscribe(
             combo =>
             {
                 ComboText.text = combo.ToString();
-
                 if (combo != 0)
                 {
                     transform.DOComplete();
@@ -74,8 +67,6 @@ public class ComboDisplayer : MonoBehaviour
                         ComboParticle.Play();
                     }
                 }
-
-
             }).AddTo(this);
     }
 
