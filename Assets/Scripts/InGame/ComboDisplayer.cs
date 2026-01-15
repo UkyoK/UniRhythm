@@ -62,10 +62,28 @@ public class ComboDisplayer : MonoBehaviour
                     transform.localScale = BigScale;
                     transform.DOScale(DefaultScale, _Duration);
 
-                    if (combo % 50 == 0)
+                    // 最大コンボ変更
+                    if (_currentCombo.CurrentValue > MaxCombo)
+                    {
+                        MaxCombo = _currentCombo.CurrentValue;
+                    }
+
+                    // 現在コンボ表示
+                    ComboText.text = _currentCombo.CurrentValue.ToString();
+
+                    // フルコンボ確認
+                    if (_currentCombo.CurrentValue == ChartLoader.Instance.AllNotesValue && !ScoreManager.Instance.IsAllPerfect)
+                    {
+                        MySoundManager.Instance.PlayClearVoice(ClearState.FullCombo);
+                        return;
+                    }
+
+                    // コンボエフェクト再生
+                    if (_currentCombo.CurrentValue % 50 == 0 && _currentCombo.CurrentValue != 0)
                     {
                         ComboParticle.Play();
                     }
+
                 }
             }).AddTo(this);
     }
@@ -75,28 +93,6 @@ public class ComboDisplayer : MonoBehaviour
     {
         // コンボ加算を通知
         _currentCombo.OnNext(_currentCombo.CurrentValue + 1);
-
-        // 最大コンボ変更
-        if (_currentCombo.CurrentValue > MaxCombo)
-        {
-            MaxCombo = _currentCombo.CurrentValue;
-        }
-
-        // 現在コンボ表示
-        ComboText.text = _currentCombo.CurrentValue.ToString();
-
-        // フルコンボ確認
-        if (_currentCombo.CurrentValue == ChartLoader.Instance.AllNotesValue && !ScoreManager.Instance.IsAllPerfect)
-        {
-            MySoundManager.Instance.PlayClearVoice(ClearState.FullCombo);
-            return;
-        }
-
-        // コンボエフェクト再生
-        if (_currentCombo.CurrentValue % 50 == 0 && _currentCombo.CurrentValue != 0)
-        {
-            ComboParticle.Play();
-        }
     }
 
     public void Miss()
