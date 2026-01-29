@@ -16,7 +16,7 @@ public class SongSelect : MonoBehaviour
     [SerializeField] GameObject Panel6;
 
     private const int _ArraySize = 7;
-    public int _CenterSongID = 3;
+    public int _CenterSongID = 0;
 
     public SelectState SongSelectState;
 
@@ -161,6 +161,7 @@ public class SongSelect : MonoBehaviour
 
             UpdateSongList();
             SelectAnimationUp();
+            ChangeJacket.Instance.JacketChange(TopSong);
         }
 
         // è„ÇÃã»Ç…à⁄ìÆ
@@ -174,6 +175,7 @@ public class SongSelect : MonoBehaviour
 
             UpdateSongList();
             SelectAnimationDown();
+            ChangeJacket.Instance.JacketChange(TopSong);
         }
 
         // ìÔà’ìxÇëIÇ‘

@@ -177,7 +177,7 @@ public class ScoreManager : MonoBehaviour
             ++FastGreatCount;
         }
 
-        ComboDisp.AddCombo();
+        MaxCombo = ComboDisp.AddCombo();
         UpdateScoreDisplay();
     }
     public void Perfect()
@@ -203,7 +203,7 @@ public class ScoreManager : MonoBehaviour
             MySoundManager.Instance.PlayClearVoice(ClearState.AllPerfect);
         }
 
-        ComboDisp.AddCombo();
+        MaxCombo = ComboDisp.AddCombo();
         UpdateScoreDisplay();
     }
 
