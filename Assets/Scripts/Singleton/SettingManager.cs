@@ -10,7 +10,7 @@ public class SettingManager : MonoBehaviour
     /// <summary>
     /// 譜面速度
     /// </summary>
-    public float NoteSpeed {  get; private set; }
+    public float NoteSpeed { get; set; }
 
     /// <summary>
     /// Perfect判定時間(ms)
@@ -28,7 +28,7 @@ public class SettingManager : MonoBehaviour
     /// <summary>
     /// ミラー設定
     /// </summary>
-    public bool IsMirror { get; private set; }
+    public bool IsMirror { get; set; }
 
     /// <summary>
     /// 環境オフセット
@@ -106,13 +106,11 @@ public class SettingManager : MonoBehaviour
     /// デフォルト設定を適用
     /// </summary>
     /// <param name="isMirror">譜面をミラーにするか否か</param>
-    public void SetDefaultSetting(bool isMirror = false)
+    public void SetDefaultSetting()
     {
-        NoteSpeed = 10;
         PerfectTime = 50;
         GreatTime = 75;
         MissTime = 100;
-        IsMirror = isMirror;
         LocalOffset = 0.0f;
 
         Lane1 = KeyCode.D;

@@ -230,7 +230,7 @@ public class ChartLoader : MonoBehaviour
         var parent = transform;
 
         int lane = laneNum;
-        if(IsMirror)
+        if(SettingManager.Instance.IsMirror)
         {
             lane = 4 - laneNum + 1;
         }
